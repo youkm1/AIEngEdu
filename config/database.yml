@@ -16,7 +16,7 @@ test:
   <<: *default
   database: ringle_task_test
   username: <%= ENV['DB_USERNAME'] || 'postgres' %>
-  password: <%= ENV['DB_PASSWORD'] %>
+  password: <%= ENV['DB_PASSWORD'] || 'password' %>
   host: <%= ENV['DB_HOST'] || 'localhost' %>
   port: <%= ENV['DB_PORT'] || 5432 %>
 
