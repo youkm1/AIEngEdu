@@ -106,6 +106,29 @@ class ChatController < ApplicationController
     MessageFlushJob.perform_async
     render json: { message: "Flush job enqueued" }
   end
+  
+  # 테스트용 논스트리밍 API
+  def simple_message
+    gemini = GeminiService.new
+    message = params[:message]
+    conversation_id = params[:conversation_id]
+    
+    # 간단한 AI 응답 (스트리밍 없이)
+    ai_response = gemini.chat(message, [])
+    
+    # Redis 캐싱
+    MessageCacheService.cache_message(conversation_id, 'user', message)
+    MessageCacheService.cache_message(conversation_id, 'assistant', ai_response)
+    
+    render json: {
+      user_message: message,
+      ai_response: ai_response,
+      conversation_id: conversation_id,
+      timestamp: Time.current
+    }
+  rescue => e
+    render json: { error: e.message }, status: :internal_server_error
+  end
 
   private
 
