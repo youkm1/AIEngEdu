@@ -24,6 +24,12 @@ gem "jbuilder"
 gem "httparty", "~> 0.21"
 gem "dotenv-rails", groups: [:development, :test]
 
+# Caching & Background Jobs
+gem "redis", "~> 5.0"
+gem "connection_pool", "~> 2.4"
+gem "sidekiq", "~> 7.2"
+gem "sidekiq-cron", "~> 1.11"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
