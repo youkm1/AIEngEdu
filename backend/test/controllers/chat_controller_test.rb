@@ -27,7 +27,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     end
 
     GeminiService.stub(:new, mock_service) do
-      # Messages are cached in Redis, not saved to DB immediately
+      # Messages should be cached in Redis (not saved to DB immediately)
       post chat_message_url, params: {
         conversation_id: @conversation.id,
         message: "Hello, AI!",
@@ -36,6 +36,14 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_equal "text/event-stream", response.headers["Content-Type"]
+      
+      # Verify messages were cached in Redis
+      cached_messages = MessageCacheService.get_cached_messages(@conversation.id)
+      assert_equal 2, cached_messages.size
+      assert_equal "user", cached_messages[0][:role]
+      assert_equal "Hello, AI!", cached_messages[0][:content]
+      assert_equal "assistant", cached_messages[1][:role]
+      assert_equal "Test AI response", cached_messages[1][:content]
     end
   end
 
