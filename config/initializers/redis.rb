@@ -13,16 +13,21 @@ unless Rails.env.test?
     url: "redis://#{redis_host}:6379/0"
   }
 else
-  # 테스트 환경에서는 mock Redis 사용
-  $redis = double("Redis", 
-    lpush: true, 
-    expire: true, 
-    llen: 0, 
-    lrange: [], 
-    publish: true, 
-    multi: [], 
-    del: true, 
-    info: {}, 
-    ltrim: true
-  )
+  # 테스트 환경에서는 Mock Redis 사용
+  class MockRedis
+    def lpush(*args); true; end
+    def expire(*args); true; end
+    def llen(*args); 0; end
+    def lrange(*args); []; end
+    def publish(*args); true; end
+    def multi(*args)
+      yield(self) if block_given?
+      [[]]
+    end
+    def del(*args); true; end
+    def info(*args); {"used_memory" => "0"}; end
+    def ltrim(*args); true; end
+  end
+  
+  $redis = MockRedis.new
 end
