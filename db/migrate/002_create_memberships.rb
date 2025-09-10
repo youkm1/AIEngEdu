@@ -7,7 +7,7 @@ class CreateMemberships < ActiveRecord::Migration[7.1]
       t.date :end_date, null: false
       t.decimal :price, precision: 10, scale: 2
       t.string :status, default: 'active'
-      
+
       t.timestamps
     end
 

@@ -8,8 +8,8 @@ module MembershipTestHelpers
       price: 49000,
       status: "active"
     )
-    
-    # Premium 활성 멤버십 (@regular_user)  
+
+    # Premium 활성 멤버십 (@regular_user)
     @regular_user.memberships.create!(
       membership_type: "premium",
       start_date: Date.current - 10.days,
@@ -17,7 +17,7 @@ module MembershipTestHelpers
       price: 99000,
       status: "active"
     )
-    
+
     # Basic 만료 멤버십 (@target_user)
     @target_user.memberships.create!(
       membership_type: "basic",
@@ -27,7 +27,7 @@ module MembershipTestHelpers
       status: "expired"
     )
   end
-  
+
   def create_basic_membership(user, status: "active")
     user.memberships.create!(
       membership_type: "basic",
@@ -37,10 +37,10 @@ module MembershipTestHelpers
       status: status
     )
   end
-  
+
   def create_premium_membership(user, status: "active")
     user.memberships.create!(
-      membership_type: "premium", 
+      membership_type: "premium",
       start_date: Date.current,
       end_date: Date.current + 60.days,
       price: 99000,

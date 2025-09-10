@@ -5,27 +5,27 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     resources :users do
-      resources :memberships, only: [:index, :create]
+      resources :memberships, only: [ :index, :create ]
     end
-    
-    resources :memberships, only: [:show, :update, :destroy] do
+
+    resources :memberships, only: [ :show, :update, :destroy ] do
       collection do
         get :active
         post :batch_create
       end
     end
-    
+
     # Admin routes
     namespace :admin do
-      resources :memberships, only: [:index, :destroy] do
+      resources :memberships, only: [ :index, :destroy ] do
         collection do
           post :assign
         end
       end
     end
-    
+
     # Payment routes (Mock Toss Payments)
-    resources :payments, only: [:show], param: :payment_key do
+    resources :payments, only: [ :show ], param: :payment_key do
       collection do
         post :prepare
         post :confirm
@@ -45,7 +45,7 @@ Rails.application.routes.draw do
   get "chat/:id/history", to: "chat#history", as: :chat_history
   get "chat/cache/status", to: "chat#cache_status"
   post "chat/cache/flush", to: "chat#flush_cache"
-  
+
   # Audio routes
   get "audio/:id", to: "audio#show", as: :audio_message
   post "audio/upload", to: "audio#upload"

@@ -33,7 +33,27 @@ services:
       timeout: 5s
       retries: 5
 
+  sidekiq:
+    image: ruby:3.2-alpine
+    container_name: ringle_sidekiq
+    working_dir: /app
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/ringle_task_development
+    command: bundle exec sidekiq -e development -q critical,3 -q default,2
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   redis_data:
+  bundle_cache:
   

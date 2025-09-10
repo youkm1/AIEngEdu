@@ -37,11 +37,11 @@ puts "Creating memberships..."
 users.each_with_index do |user, index|
   # 50% 유저는 premium, 50%는 basic
   membership_type = index.even? ? "premium" : "basic"
-  
+
   # 멤버십 기간 자동 계산
   duration_days = membership_type == "premium" ? 60 : 30
   start_date = Date.today - rand(1..30).days
-  
+
   # 활성 멤버십 (사용자당 하나만)
   Membership.create!(
     user: user,

@@ -16,7 +16,7 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get api_users_url
     assert_response :success
-    
+
     json_response = JSON.parse(response.body)
     assert_instance_of Array, json_response
   end
@@ -24,7 +24,7 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
   test "should show user" do
     get api_user_url(@user)
     assert_response :success
-    
+
     json_response = JSON.parse(response.body)
     assert_equal @user.email, json_response["email"]
   end
@@ -33,7 +33,7 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_difference("User.count", 1) do
       post api_users_url, params: @valid_params
     end
-    
+
     assert_response :created
     json_response = JSON.parse(response.body)
     assert_equal "Test User", json_response["name"]
@@ -41,11 +41,11 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create user with invalid params" do
     invalid_params = { user: { name: "", email: "" } }
-    
+
     assert_no_difference("User.count") do
       post api_users_url, params: invalid_params
     end
-    
+
     assert_response :unprocessable_entity
     json_response = JSON.parse(response.body)
     assert json_response["errors"].present?
@@ -54,7 +54,7 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
   test "should update user" do
     patch api_user_url(@user), params: { user: { name: "Updated Name" } }
     assert_response :success
-    
+
     @user.reload
     assert_equal "Updated Name", @user.name
   end
@@ -63,14 +63,14 @@ class Api::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_difference("User.count", -1) do
       delete api_user_url(@user)
     end
-    
+
     assert_response :no_content
   end
 
   test "should return 404 for non-existent user" do
     get api_user_url(id: 999999)
     assert_response :not_found
-    
+
     json_response = JSON.parse(response.body)
     assert_equal "User not found", json_response["error"]
   end

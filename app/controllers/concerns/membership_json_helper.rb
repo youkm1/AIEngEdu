@@ -1,8 +1,8 @@
 module MembershipJsonHelper
   extend ActiveSupport::Concern
-  
+
   private
-  
+
   def membership_json(membership)
     {
       id: membership.id,
@@ -23,13 +23,13 @@ module MembershipJsonHelper
       updated_at: membership.updated_at
     }
   end
-  
+
   def success_json(message:, data: nil)
     response = { success: true, message: message }
     response[:data] = data if data
     response
   end
-  
+
   def error_json(message:, errors: nil, status: :unprocessable_entity)
     response = { success: false, message: message }
     response[:errors] = errors if errors

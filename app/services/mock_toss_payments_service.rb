@@ -2,7 +2,7 @@ class MockTossPaymentsService
   # 토스 페이먼츠 API를 모방한 Mock 서비스
   # 실제 결제 없이 토스 페이먼츠 응답 형태만 모방
   # 모든 URL은 가짜이며 실제 토스 페이먼츠 API를 호출하지 않음
-  
+
   class << self
     # 결제 승인 요청 (토스 페이먼츠 /v1/payments/confirm 모방)
     def confirm_payment(payment_key:, order_id:, amount:)
@@ -39,8 +39,8 @@ class MockTossPaymentsService
         failure: nil,
         isPartialCancelable: true,
         receipt: {
-          #실제 토스 연동 api 연결 확장을 고려하여 url 설계
-          url: "https://mock-payments.ringle.com/receipt/#{payment_key}" 
+          # 실제 토스 연동 api 연결 확장을 고려하여 url 설계
+          url: "https://mock-payments.ringle.com/receipt/#{payment_key}"
         },
         checkout: {
           url: "https://mock-payments.ringle.com/checkout/#{payment_key}"
@@ -55,7 +55,7 @@ class MockTossPaymentsService
         version: "2022-11-16"
       }
     end
-    
+
     # 결제 취소 요청 (토스 페이먼츠 /v1/payments/{paymentKey}/cancel 모방)
     def cancel_payment(payment_key:, cancel_reason:, cancel_amount: nil)
       # Mock 결제 취소 응답
@@ -103,7 +103,7 @@ class MockTossPaymentsService
         version: "2022-11-16"
       }
     end
-    
+
     # 결제 조회 (토스 페이먼츠 /v1/payments/{paymentKey} 모방)
     def get_payment(payment_key:)
       {
@@ -120,7 +120,7 @@ class MockTossPaymentsService
         version: "2022-11-16"
       }
     end
-    
+
     # 결제 실패 시뮬레이션 (테스트용)
     def simulate_payment_failure(error_code: "INVALID_CARD_NUMBER")
       {
@@ -129,9 +129,9 @@ class MockTossPaymentsService
         timestamp: Time.current.iso8601
       }
     end
-    
+
     private
-    
+
     def mock_card_info
       {
         amount: 99000,
@@ -148,7 +148,7 @@ class MockTossPaymentsService
         interestPayer: nil
       }
     end
-    
+
     def get_order_name(order_id)
       if order_id.include?("PREMIUM")
         "프리미엄 멤버십 (60일)"
@@ -158,7 +158,7 @@ class MockTossPaymentsService
         "멤버십 결제"
       end
     end
-    
+
     def get_error_message(error_code)
       case error_code
       when "INVALID_CARD_NUMBER"

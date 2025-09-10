@@ -22,7 +22,7 @@ gem "jbuilder"
 
 # AI & SSE Support
 gem "httparty", "~> 0.21"
-gem "dotenv-rails", groups: [:development, :test]
+gem "dotenv-rails", groups: [ :development, :test ]
 
 # Caching & Background Jobs
 gem "redis", "~> 5.0"
@@ -59,7 +59,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  
+
   # Testing
   gem "factory_bot_rails", "~> 6.4"
   gem "faker", "~> 3.4"

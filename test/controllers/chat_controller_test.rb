@@ -8,12 +8,12 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
 
   test "should create conversation" do
     assert_difference("Conversation.count", 1) do
-      post chat_url, params: { 
+      post chat_url, params: {
         title: "New Chat",
-        user_id: @user.id 
+        user_id: @user.id
       }
     end
-    
+
     assert_response :success
     json_response = JSON.parse(response.body)
     assert_equal "New Chat", json_response["title"]
@@ -25,7 +25,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     mock_service.expect(:stream_chat, nil) do |message, &block|
       block.call("Test AI response") if block
     end
-    
+
     GeminiService.stub(:new, mock_service) do
       assert_difference("Message.count", 2) do
         post chat_message_url, params: {
@@ -34,7 +34,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
           user_id: @user.id
         }
       end
-      
+
       assert_response :success
       assert_equal "text/event-stream", response.headers["Content-Type"]
     end
@@ -46,7 +46,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
       message: "",
       user_id: @user.id
     }
-    
+
     assert_response :success
   end
 
@@ -56,7 +56,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
       message: "Test message",
       user_id: @user.id
     }
-    
+
     assert_response :success
   end
 
@@ -67,16 +67,16 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
       block.call("Chunk 1") if block
       block.call("Chunk 2") if block
     end
-    
+
     GeminiService.stub(:new, mock_service) do
       post chat_message_url, params: {
         conversation_id: @conversation.id,
         message: "Test streaming",
         user_id: @user.id
       }
-      
+
       assert_response :success
-      
+
       # SSE 포맷 확인
       response_body = response.body
       assert_match /data: /, response_body
@@ -85,10 +85,10 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should return error without user" do
-    post chat_url, params: { 
+    post chat_url, params: {
       title: "New Chat"
     }
-    
+
     assert_response :unprocessable_entity
     json_response = JSON.parse(response.body)
     assert json_response["error"].present?

@@ -1,21 +1,21 @@
-require 'httparty'
-require 'json'
+require "httparty"
+require "json"
 
 class GeminiService
   include HTTParty
-  base_uri 'https://generativelanguage.googleapis.com/v1beta'
+  base_uri "https://generativelanguage.googleapis.com/v1beta"
 
   def initialize
-    @api_key = ENV['GEMINI_API_KEY']
-    @model = 'gemini-2.0-flash-exp'
+    @api_key = ENV["GEMINI_API_KEY"]
+    @model = "gemini-2.0-flash-exp"
   end
 
   def chat(message, conversation_history = [])
     response = self.class.post(
       "/models/#{@model}:generateContent",
       headers: {
-        'Content-Type' => 'application/json',
-        'X-goog-api-key' => @api_key
+        "Content-Type" => "application/json",
+        "X-goog-api-key" => @api_key
       },
       body: build_request_body(message, conversation_history).to_json
     )
@@ -33,11 +33,11 @@ class GeminiService
 
   def stream_chat(message, conversation_history = [])
     uri = URI("https://generativelanguage.googleapis.com/v1beta/models/#{@model}:streamGenerateContent?alt=sse")
-    
+
     Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
       request = Net::HTTP::Post.new(uri)
-      request['Content-Type'] = 'application/json'
-      request['X-goog-api-key'] = @api_key
+      request["Content-Type"] = "application/json"
+      request["X-goog-api-key"] = @api_key
       request.body = build_request_body(message, conversation_history).to_json
 
       http.request(request) do |response|
@@ -45,7 +45,7 @@ class GeminiService
           if chunk.start_with?("data: ")
             json_str = chunk[6..-1].strip
             next if json_str == "[DONE]"
-            
+
             begin
               data = JSON.parse(json_str)
               text = extract_text_from_streaming_response(data)
@@ -67,14 +67,14 @@ class GeminiService
   def build_request_body(message, conversation_history = [])
     contents = conversation_history.map do |msg|
       {
-        role: msg[:role] == 'assistant' ? 'model' : 'user',
-        parts: [{ text: msg[:content] }]
+        role: msg[:role] == "assistant" ? "model" : "user",
+        parts: [ { text: msg[:content] } ]
       }
     end
 
     contents << {
-      role: 'user',
-      parts: [{ text: message }]
+      role: "user",
+      parts: [ { text: message } ]
     }
 
     {
@@ -89,11 +89,11 @@ class GeminiService
   end
 
   def extract_text_from_response(response)
-    response.dig('candidates', 0, 'content', 'parts', 0, 'text') || 
+    response.dig("candidates", 0, "content", "parts", 0, "text") ||
       "응답을 생성할 수 없습니다."
   end
 
   def extract_text_from_streaming_response(data)
-    data.dig('candidates', 0, 'content', 'parts', 0, 'text')
+    data.dig("candidates", 0, "content", "parts", 0, "text")
   end
 end

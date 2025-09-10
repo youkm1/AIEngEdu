@@ -25,7 +25,7 @@ class MembershipTest < ActiveSupport::TestCase
   end
 
   test "should validate end_date is after start_date" do
-    membership = build(:membership, 
+    membership = build(:membership,
       start_date: Date.today,
       end_date: Date.today - 1.day
     )
@@ -36,7 +36,7 @@ class MembershipTest < ActiveSupport::TestCase
   test "active scope should return active memberships" do
     active = create(:membership, end_date: Date.today + 30.days)
     expired = create(:membership, :expired)
-    
+
     assert_includes Membership.active, active
     assert_not_includes Membership.active, expired
   end
@@ -44,7 +44,7 @@ class MembershipTest < ActiveSupport::TestCase
   test "expired scope should return expired memberships" do
     active = create(:membership, end_date: Date.today + 30.days)
     expired = create(:membership, :expired)
-    
+
     assert_includes Membership.expired, expired
     assert_not_includes Membership.expired, active
   end
@@ -52,7 +52,7 @@ class MembershipTest < ActiveSupport::TestCase
   test "premium scope should return only premium memberships" do
     premium = create(:membership, :premium)
     basic = create(:membership, :basic)
-    
+
     assert_includes Membership.premium, premium
     assert_not_includes Membership.premium, basic
   end

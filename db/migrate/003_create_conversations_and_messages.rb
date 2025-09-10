@@ -12,8 +12,8 @@ class CreateConversationsAndMessages < ActiveRecord::Migration[7.1]
       t.text :content, null: false
       t.timestamps
     end
-    
+
     add_index :conversations, :created_at
-    add_index :messages, [:conversation_id, :created_at]
+    add_index :messages, [ :conversation_id, :created_at ]
   end
 end
