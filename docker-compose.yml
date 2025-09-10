@@ -1,6 +1,30 @@
 version: '3.8'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: ringle_app
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/ringle_task_development
+      - REDIS_URL=redis://redis:6379/0
+      - SIDEKIQ_REDIS_URL=redis://redis:6379/1
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - DOCKER_ENV=true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: sh -c "bundle install && bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"
+
   postgres:
     image: postgres:15-alpine
     container_name: ringle_postgres
@@ -34,21 +58,25 @@ services:
       retries: 5
 
   sidekiq:
-    image: ruby:3.2-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     container_name: ringle_sidekiq
-    working_dir: /app
     volumes:
       - .:/app
       - bundle_cache:/usr/local/bundle
     environment:
       - RAILS_ENV=development
       - REDIS_URL=redis://redis:6379/0
+      - SIDEKIQ_REDIS_URL=redis://redis:6379/1
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/ringle_task_development
-    command: bundle exec sidekiq -e development -q critical,3 -q default,2
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - DOCKER_ENV=true
+    command: sh -c "bundle install && bundle exec sidekiq -e development -q critical,3 -q default,2"
     depends_on:
+      app:
+        condition: service_started
       redis:
-        condition: service_healthy
-      postgres:
         condition: service_healthy
     restart: unless-stopped
 
