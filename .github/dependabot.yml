@@ -1,12 +1,17 @@
 version: 2
 updates:
 - package-ecosystem: bundler
-  directory: "/backend"
+  directory: "/backend"           # 경로가 올바름
   schedule:
     interval: daily
   open-pull-requests-limit: 10
 - package-ecosystem: github-actions
-  directory: "/backend"
+  directory: "/"                  # GitHub Actions는 루트에서
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: npm          # 프론트엔드 추가
+  directory: "/frontend/fingle"   # React 프로젝트 경로
   schedule:
     interval: daily
   open-pull-requests-limit: 10
