@@ -43,7 +43,7 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     confirm_data = json_response[:data]
-    
+
     # Ensure data exists
     assert_not_nil confirm_data, "Response data should not be nil. Full response: #{json_response.inspect}"
     assert_not_nil confirm_data[:payment], "Payment data should not be nil. confirm_data: #{confirm_data.inspect}"

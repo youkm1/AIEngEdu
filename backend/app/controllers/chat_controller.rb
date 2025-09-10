@@ -25,7 +25,7 @@ class ChatController < ApplicationController
 
     # Conversation 객체 확인
     conversation = Conversation.find_by(id: conversation_id)
-    
+
     # 사용자 메시지 DB 저장 + Redis 캐싱
     user_message = nil
     if conversation

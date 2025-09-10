@@ -31,10 +31,10 @@ class MessageCacheServiceTest < ActiveSupport::TestCase
 
     # Then
     assert_equal 2, messages.size
-    assert_equal "user", messages[ 0 ][:role]
-    assert_equal "Message 1", messages[ 0 ][:content]
-    assert_equal "assistant", messages[ 1 ][:role]
-    assert_equal "Message 2", messages[ 1 ][:content]
+    assert_equal "user", messages[0][:role]
+    assert_equal "Message 1", messages[0][:content]
+    assert_equal "assistant", messages[1][:role]
+    assert_equal "Message 2", messages[1][:content]
   end
 
   test "should clear conversation cache" do

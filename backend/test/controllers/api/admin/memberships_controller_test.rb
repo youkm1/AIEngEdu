@@ -159,7 +159,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
       user_id: 99999,
       membership_type: "basic"
     }
-    
+
     # Then: 404 Not Found 응답
     assert_response :not_found
     assert_json_error_response("요청한 리소스를 찾을 수 없습니다")
