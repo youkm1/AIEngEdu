@@ -1,64 +1,56 @@
 name: CI
-
 on:
   pull_request:
   push:
     branches: [ main ]
-
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: backend/.ruby-version  # 경로 수정
           bundler-cache: true
-
+          working-directory: backend           # 추가: bundler가 backend에서 작동하도록
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: backend/bin/brakeman --no-pager
-        working-directory: .
-
+        run: bin/brakeman --no-pager
+        working-directory: backend            # backend 디렉토리에서 실행
+        
   scan_js:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: backend/.ruby-version  # 경로 수정
           bundler-cache: true
-
+          working-directory: backend           # 추가
       - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: backend/bin/importmap audit
-        working-directory: .
-
+        run: bin/importmap audit
+        working-directory: backend            # backend 디렉토리에서 실행
+        
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: backend/.ruby-version  # 경로 수정
           bundler-cache: true
-
+          working-directory: backend           # 추가
       - name: Lint code for consistent style
-        run: backend/bin/rubocop -f github
-        working-directory: .
-
+        run: bin/rubocop -f github
+        working-directory: backend            # backend 디렉토리에서 실행
+        
   test:
     runs-on: ubuntu-latest
-
     services:
       redis:
         image: redis
@@ -77,29 +69,26 @@ jobs:
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable
-
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: backend/.ruby-version  # 경로 수정
           bundler-cache: true
-
+          working-directory: backend           # 추가
       - name: Run tests
         env:
           RAILS_ENV: test
           REDIS_URL: redis://localhost:6379/0
           DATABASE_URL: postgresql://postgres:password@localhost:5432/ringle_task_test
           GEMINI_API_KEY: test_key_for_ci
-        run: backend/bin/rails db:test:prepare test test:system
-        working-directory: .
-
+        run: bin/rails db:test:prepare test test:system
+        working-directory: backend            # backend 디렉토리에서 실행
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
+          path: backend/tmp/screenshots        # 경로 수정
           if-no-files-found: ignore
