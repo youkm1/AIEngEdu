@@ -9,6 +9,8 @@ services:
     volumes:
       - .:/app
       - bundle_cache:/usr/local/bundle
+    env_file:
+      - .env.development
     environment:
       - RAILS_ENV=development
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/ringle_task_development
@@ -63,6 +65,8 @@ services:
     volumes:
       - .:/app
       - bundle_cache:/usr/local/bundle
+    env_file:
+      - .env.development
     environment:
       - RAILS_ENV=development
       - REDIS_URL=redis://redis:6379/0
