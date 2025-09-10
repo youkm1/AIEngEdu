@@ -1,0 +1,15 @@
+{
+  "name": "ringle-ai-tutor",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"cd backend && rails server -p 3001\" \"cd frontend/fingle && npm start\"",
+    "install:all": "cd backend && bundle install && cd ../frontend/fingle && npm install",
+    "build": "cd frontend/fingle && npm run build",
+    "test:backend": "cd backend && bundle exec rspec",
+    "test:frontend": "cd frontend/fingle && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
