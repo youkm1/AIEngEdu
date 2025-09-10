@@ -27,13 +27,12 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     end
 
     GeminiService.stub(:new, mock_service) do
-      assert_difference("Message.count", 2) do
-        post chat_message_url, params: {
-          conversation_id: @conversation.id,
-          message: "Hello, AI!",
-          user_id: @user.id
-        }
-      end
+      # Messages are cached in Redis, not saved to DB immediately
+      post chat_message_url, params: {
+        conversation_id: @conversation.id,
+        message: "Hello, AI!",
+        user_id: @user.id
+      }
 
       assert_response :success
       assert_equal "text/event-stream", response.headers["Content-Type"]

@@ -23,18 +23,6 @@ class ChatController < ApplicationController
     conversation_id = params[:conversation_id]
     audio_file = params[:audio_file]
 
-    # Conversation 객체 확인
-    conversation = Conversation.find_by(id: conversation_id)
-
-    # 사용자 메시지 DB 저장 + Redis 캐싱
-    user_message = nil
-    if conversation
-      user_message = conversation.messages.create!(
-        role: "user",
-        content: message
-      )
-    end
-
     # 사용자 메시지 Redis 캐싱 (비동기) + 오디오 메타데이터
     user_message_id = MessageCacheService.cache_message(
       conversation_id,
@@ -66,14 +54,6 @@ class ChatController < ApplicationController
           message_id: user_message_id
         })
       end
-    end
-
-    # AI 응답 DB 저장 + Redis 캐싱
-    if conversation && ai_response.present?
-      conversation.messages.create!(
-        role: "assistant",
-        content: ai_response
-      )
     end
 
     # AI 응답 Redis 캐싱 (비동기)
