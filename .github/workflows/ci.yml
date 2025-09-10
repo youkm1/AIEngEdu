@@ -12,12 +12,12 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: backend/.ruby-version  # 경로 수정
+          ruby-version-file: 'backend/.ruby-version'  # ruby-version-file 사용
           bundler-cache: true
-          working-directory: backend           # 추가: bundler가 backend에서 작동하도록
+          working-directory: backend
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
-        working-directory: backend            # backend 디렉토리에서 실행
+        working-directory: backend
         
   scan_js:
     runs-on: ubuntu-latest
@@ -27,12 +27,12 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: backend/.ruby-version  # 경로 수정
+          ruby-version-file: 'backend/.ruby-version'  # ruby-version-file 사용
           bundler-cache: true
-          working-directory: backend           # 추가
+          working-directory: backend
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
-        working-directory: backend            # backend 디렉토리에서 실행
+        working-directory: backend
         
   lint:
     runs-on: ubuntu-latest
@@ -42,12 +42,12 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: backend/.ruby-version  # 경로 수정
+          ruby-version-file: 'backend/.ruby-version'  # ruby-version-file 사용
           bundler-cache: true
-          working-directory: backend           # 추가
+          working-directory: backend
       - name: Lint code for consistent style
         run: bin/rubocop -f github
-        working-directory: backend            # backend 디렉토리에서 실행
+        working-directory: backend
         
   test:
     runs-on: ubuntu-latest
@@ -74,9 +74,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: backend/.ruby-version  # 경로 수정
+          ruby-version-file: 'backend/.ruby-version'  # ruby-version-file 사용
           bundler-cache: true
-          working-directory: backend           # 추가
+          working-directory: backend
       - name: Run tests
         env:
           RAILS_ENV: test
@@ -84,11 +84,11 @@ jobs:
           DATABASE_URL: postgresql://postgres:password@localhost:5432/ringle_task_test
           GEMINI_API_KEY: test_key_for_ci
         run: bin/rails db:test:prepare test test:system
-        working-directory: backend            # backend 디렉토리에서 실행
+        working-directory: backend
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: screenshots
-          path: backend/tmp/screenshots        # 경로 수정
+          path: backend/tmp/screenshots
           if-no-files-found: ignore
