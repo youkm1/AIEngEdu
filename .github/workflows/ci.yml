@@ -12,7 +12,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'
           bundler-cache: true
           working-directory: backend
       - name: Scan for common Rails security vulnerabilities using static analysis
@@ -27,7 +27,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'
           bundler-cache: true
           working-directory: backend
       - name: Scan for security vulnerabilities in JavaScript dependencies
@@ -42,7 +42,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'
           bundler-cache: true
           working-directory: backend
       - name: Lint code for consistent style
@@ -74,16 +74,30 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'
           bundler-cache: true
           working-directory: backend
+      - name: Setup database
+        env:
+          RAILS_ENV: test
+          DB_USERNAME: postgres
+          DB_PASSWORD: password
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load
+        working-directory: backend
       - name: Run tests
         env:
           RAILS_ENV: test
           REDIS_URL: redis://localhost:6379/0
-          DATABASE_URL: postgresql://postgres:password@localhost:5432/ringle_task_test
+          DB_USERNAME: postgres
+          DB_PASSWORD: password
+          DB_HOST: localhost
+          DB_PORT: 5432
           GEMINI_API_KEY: test_key_for_ci
-        run: bin/rails db:test:prepare test test:system
+        run: bin/rails test test:system
         working-directory: backend
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
