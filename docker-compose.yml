@@ -14,8 +14,8 @@ services:
     environment:
       - RAILS_ENV=development
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/ringle_task_development
-      - REDIS_URL=redis://redis:6379/0
-      - SIDEKIQ_REDIS_URL=redis://redis:6379/1
+      - REDIS_URL=ringle_redis://redis:6379/0
+      - SIDEKIQ_REDIS_URL=ringle_redis://redis:6379/1
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - DOCKER_ENV=true
     depends_on:
@@ -67,8 +67,8 @@ services:
       - bundle_cache:/usr/local/bundle
     environment:
       - RAILS_ENV=development
-      - REDIS_URL=redis://redis:6379/0
-      - SIDEKIQ_REDIS_URL=redis://redis:6379/1
+      - REDIS_URL=ringle_redis://redis:6379/0
+      - SIDEKIQ_REDIS_URL=ringle_redis://redis:6379/1
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/ringle_task_development
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - DOCKER_ENV=true

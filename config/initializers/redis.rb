@@ -1,12 +1,12 @@
 require "redis"
 
-# Redis 연결 설정 (환경별 호스트 설정)
+# 환경별 Redis 호스트 설정
 redis_host = ENV["DOCKER_ENV"] ? "redis" : "localhost"
-redis_url = ENV.fetch("REDIS_URL", "redis://#{redis_host}:6379/0")
 
-$redis = Redis.new(url: redis_url)
+# MessageCacheService용 Redis (DB 0)
+$redis = Redis.new(url: "ringle_redis://#{redis_host}:6379/0")
 
-# Rails 캐시 스토어로 Redis 설정
+# Rails 캐시 스토어도 동일한 DB 사용
 Rails.application.config.cache_store = :redis_cache_store, {
-  url: redis_url
+  url: "ringle_redis://#{redis_host}:6379/0"
 }
