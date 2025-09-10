@@ -12,7 +12,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version-file: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'  # ruby-version-file 사용
           bundler-cache: true
           working-directory: backend
       - name: Scan for common Rails security vulnerabilities using static analysis
@@ -27,7 +27,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version-file: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'  # ruby-version-file 사용
           bundler-cache: true
           working-directory: backend
       - name: Scan for security vulnerabilities in JavaScript dependencies
@@ -42,7 +42,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version-file: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'  # ruby-version-file 사용
           bundler-cache: true
           working-directory: backend
       - name: Lint code for consistent style
@@ -74,7 +74,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version-file: '3.4.5'  # ruby-version-file 사용
+          ruby-version: '3.4.5'  # ruby-version-file 사용
           bundler-cache: true
           working-directory: backend
       - name: Run tests
