@@ -23,8 +23,8 @@ class UserTest < ActiveSupport::TestCase
 
   test "should have many memberships" do
     user = create(:user)
-    membership1 = create(:membership, user: user)
-    membership2 = create(:membership, user: user)
+    membership1 = create(:membership, user: user, status: "expired")
+    membership2 = create(:membership, user: user, status: "active")
 
     assert_equal 2, user.memberships.count
     assert_includes user.memberships, membership1

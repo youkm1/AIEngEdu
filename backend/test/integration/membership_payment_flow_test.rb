@@ -16,7 +16,7 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
 
   test "complete membership payment flow should work end-to-end" do
     # Step 1: 결제 준비
-    post api_payments_prepare_path, params: {
+    post prepare_api_payments_path, params: {
       user_id: @user.id,
       membership_type: "premium"
     }
@@ -34,7 +34,7 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
     payment_key = "PAYMENT-#{SecureRandom.hex(8).upcase}"
 
     # Step 3: 결제 승인
-    post api_payments_confirm_path, params: {
+    post confirm_api_payments_path, params: {
       user_id: @user.id,
       paymentKey: payment_key,
       orderId: order_id,
@@ -43,6 +43,10 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     confirm_data = json_response[:data]
+    
+    # Ensure data exists
+    assert_not_nil confirm_data, "Response data should not be nil. Full response: #{json_response.inspect}"
+    assert_not_nil confirm_data[:payment], "Payment data should not be nil. confirm_data: #{confirm_data.inspect}"
 
     # Payment 응답 검증
     assert_equal "DONE", confirm_data[:payment][:status]
@@ -70,14 +74,14 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
     assert_equal "active", existing_membership.status
 
     # When: Premium으로 업그레이드
-    post api_payments_prepare_path, params: {
+    post prepare_api_payments_path, params: {
       user_id: @user.id,
       membership_type: "premium"
     }
 
     prepare_data = json_response[:data]
 
-    post api_payments_confirm_path, params: {
+    post confirm_api_payments_path, params: {
       user_id: @user.id,
       paymentKey: "PAYMENT-UPGRADE-#{SecureRandom.hex(4)}",
       orderId: prepare_data[:orderId],
@@ -106,7 +110,7 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
     target_user = User.create!(email: "target@example.com", name: "대상자")
 
     # Step 1: 관리자가 멤버십 부여
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: @admin_user.id,
       user_id: target_user.id,
       membership_type: "basic",
@@ -153,7 +157,7 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
 
   test "should handle payment failure gracefully" do
     # Step 1: 정상 결제 준비
-    post api_payments_prepare_path, params: {
+    post prepare_api_payments_path, params: {
       user_id: @user.id,
       membership_type: "basic"
     }
@@ -161,7 +165,7 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
     prepare_data = json_response[:data]
 
     # Step 2: 잘못된 금액으로 결제 승인 시도
-    post api_payments_confirm_path, params: {
+    post confirm_api_payments_path, params: {
       user_id: @user.id,
       paymentKey: "INVALID-PAYMENT",
       orderId: prepare_data[:orderId],
@@ -180,7 +184,7 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
     regular_user = User.create!(email: "regular@example.com", name: "일반 사용자")
 
     # When: 일반 사용자가 관리자 API 접근 시도
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: regular_user.id,  # 관리자가 아닌 사용자
       user_id: @user.id,
       membership_type: "premium"
@@ -196,10 +200,11 @@ class MembershipPaymentFlowTest < ActionDispatch::IntegrationTest
   test "should handle concurrent membership operations" do
     # 동일 사용자에 대한 여러 멤버십 생성 시도
     threads = []
+    confirm_path = confirm_api_payments_path
 
     3.times do |i|
       threads << Thread.new do
-        post api_payments_confirm_path, params: {
+        post confirm_path, params: {
           user_id: @user.id,
           paymentKey: "CONCURRENT-#{i}",
           orderId: "ORDER-BASIC-#{Time.current.to_i}-#{i}",

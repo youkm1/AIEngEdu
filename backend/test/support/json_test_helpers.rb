@@ -1,6 +1,6 @@
 module JsonTestHelpers
   def json_response
-    @json_response ||= JSON.parse(response.body, symbolize_names: true)
+    JSON.parse(response.body, symbolize_names: true)
   end
 
   def assert_json_success_response(message = nil)

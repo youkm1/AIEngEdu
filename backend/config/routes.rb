@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :memberships, only: [ :index, :destroy ] do
         collection do
-          post :assign
+          post :assign, as: :assign
         end
       end
     end
@@ -27,8 +27,8 @@ Rails.application.routes.draw do
     # Payment routes (Mock Toss Payments)
     resources :payments, only: [ :show ], param: :payment_key do
       collection do
-        post :prepare
-        post :confirm
+        post :prepare, as: :prepare
+        post :confirm, as: :confirm
         post :cancel
         post :webhook
         get :success

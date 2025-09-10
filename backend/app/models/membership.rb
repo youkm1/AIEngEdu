@@ -26,8 +26,8 @@ class Membership < ApplicationRecord
 
   validate :end_date_after_start_date
 
-  scope :active, -> { where("end_date >= ?", Date.current) }
-  scope :expired, -> { where("end_date < ?", Date.current) }
+  scope :active, -> { where("end_date >= ? AND status = ?", Date.current, "active") }
+  scope :expired, -> { where("end_date < ? OR status = ?", Date.current, "expired") }
   scope :premium, -> { where(membership_type: "premium") }
   scope :basic, -> { where(membership_type: "basic") }
 

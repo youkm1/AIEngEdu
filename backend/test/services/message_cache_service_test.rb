@@ -1,6 +1,11 @@
 require "test_helper"
 
 class MessageCacheServiceTest < ActiveSupport::TestCase
+  setup do
+    # Clear Redis before each test to start fresh
+    $redis.flushdb
+  end
+
   test "should cache message" do
     # Given
     conversation_id = "test-conversation-123"

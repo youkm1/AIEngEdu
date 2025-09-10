@@ -21,7 +21,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
   test "should require admin authentication for all actions" do
     # Given: 인증 없이 요청
     # When: Admin API 호출
-    post api_admin_memberships_assign_path
+    post assign_api_admin_memberships_path
 
     # Then: 403 Forbidden
     assert_response :forbidden
@@ -31,7 +31,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
   test "should reject non-admin user access" do
     # Given: 일반 사용자로 인증
     # When: Admin API 호출
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: @regular_user.id,
       user_id: @target_user.id,
       membership_type: "premium"
@@ -45,7 +45,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
   test "should allow admin user access" do
     # Given: Admin 사용자로 인증
     # When: Admin API 호출
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: @admin_user.id,
       user_id: @target_user.id,
       membership_type: "basic"
@@ -63,7 +63,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, @target_user.memberships.count
 
     # When: Basic 멤버십 부여
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: @admin_user.id,
       user_id: @target_user.id,
       membership_type: "basic",
@@ -91,7 +91,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
   test "should assign premium membership successfully" do
     # Given: 멤버십이 없는 사용자
     # When: Premium 멤버십 부여
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: @admin_user.id,
       user_id: @target_user.id,
       membership_type: "premium"
@@ -119,7 +119,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "active", existing_membership.status
 
     # When: 새로운 멤버십 부여
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: @admin_user.id,
       user_id: @target_user.id,
       membership_type: "premium"
@@ -140,7 +140,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
 
   test "should validate membership_type parameter" do
     # When: 잘못된 멤버십 타입으로 요청
-    post api_admin_memberships_assign_path, params: {
+    post assign_api_admin_memberships_path, params: {
       admin_user_id: @admin_user.id,
       user_id: @target_user.id,
       membership_type: "invalid_type"
@@ -154,13 +154,15 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
 
   test "should validate user existence" do
     # When: 존재하지 않는 사용자에게 멤버십 부여
-    assert_raises(ActiveRecord::RecordNotFound) do
-      post api_admin_memberships_assign_path, params: {
-        admin_user_id: @admin_user.id,
-        user_id: 99999,
-        membership_type: "basic"
-      }
-    end
+    post assign_api_admin_memberships_path, params: {
+      admin_user_id: @admin_user.id,
+      user_id: 99999,
+      membership_type: "basic"
+    }
+    
+    # Then: 404 Not Found 응답
+    assert_response :not_found
+    assert_json_error_response("요청한 리소스를 찾을 수 없습니다")
   end
 
   # ========== 멤버십 삭제 테스트 ==========
@@ -249,7 +251,7 @@ class Api::Admin::MembershipsControllerTest < ActionDispatch::IntegrationTest
     # Given: 사용자
     # When: 연속으로 멤버십 할당
     2.times do
-      post api_admin_memberships_assign_path, params: {
+      post assign_api_admin_memberships_path, params: {
         admin_user_id: @admin_user.id,
         user_id: @target_user.id,
         membership_type: "premium"
