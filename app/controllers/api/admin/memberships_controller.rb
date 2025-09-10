@@ -1,4 +1,7 @@
 class Api::Admin::MembershipsController < ApplicationController
+  include MembershipJsonHelper
+  include ErrorHandler
+  
   skip_before_action :verify_authenticity_token
   before_action :require_admin
   
@@ -23,12 +26,15 @@ class Api::Admin::MembershipsController < ApplicationController
     membership.end_date = membership.start_date + duration.days
     
     if membership.save
-      render json: {
+      render json: success_json(
         message: "멤버십이 성공적으로 부여되었습니다",
-        membership: membership_json(membership)
-      }, status: :created
+        data: membership_json(membership)
+      ), status: :created
     else
-      render json: { errors: membership.errors.full_messages }, status: :unprocessable_entity
+      render json: error_json(
+        message: "멤버십 부여에 실패했습니다",
+        errors: membership.errors.full_messages
+      ), status: :unprocessable_entity
     end
   end
   
@@ -40,11 +46,10 @@ class Api::Admin::MembershipsController < ApplicationController
     
     membership.destroy
     
-    render json: {
+    render json: success_json(
       message: "멤버십이 삭제되었습니다",
-      user_id: user.id,
-      user_name: user.name
-    }
+      data: { user_id: user.id, user_name: user.name }
+    )
   end
   
   # GET /api/admin/memberships
@@ -60,34 +65,15 @@ class Api::Admin::MembershipsController < ApplicationController
   private
   
   def require_admin
-    # 실제 프로덕션에서는 적절한 인증/인가 로직 필요
-    # 현재는 admin@ringle.com 이메일로 간단히 체크
-    unless current_user&.email == 'admin@ringle.com'
-      render json: { error: "관리자 권한이 필요합니다" }, status: :forbidden
+    admin_user_id = params[:admin_user_id] 
+    admin_user = User.find_by(id: admin_user_id)
+    
+    unless admin_user&.email == 'admin@ringle.com'
+      render json: error_json(
+        message: "관리자 권한이 필요합니다"
+      ), status: :forbidden
     end
   end
   
-  def current_user
-    @current_user ||= User.find_by(id: params[:admin_user_id] || request.headers['X-Admin-User-Id'])
-  end
-  
-  def membership_json(membership)
-    {
-      id: membership.id,
-      user_id: membership.user_id,
-      user_name: membership.user.name,
-      user_email: membership.user.email,
-      membership_type: membership.membership_type,
-      membership_level: Membership::LEVELS[membership.membership_type],
-      available_features: membership.available_features,
-      description: membership.description,
-      start_date: membership.start_date,
-      end_date: membership.end_date,
-      price: membership.price,
-      status: membership.status,
-      is_active: membership.active?,
-      created_at: membership.created_at,
-      updated_at: membership.updated_at
-    }
-  end
+  # membership_json 메서드는 MembershipJsonHelper에서 제공
 end

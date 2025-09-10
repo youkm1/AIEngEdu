@@ -1,8 +1,12 @@
-# 개발 환경에서만 데이터 정리
-if Rails.env.development?
-  puts "Cleaning database..."
+# 환경별 데이터 관리
+case Rails.env
+when 'development', 'test'
+  puts "Cleaning #{Rails.env} database..."
   Membership.destroy_all
   User.destroy_all
+when 'production'
+  # 프로덕션에서는 기존 데이터 유지하고 없는 것만 추가
+  puts "Production environment - only adding missing data..."
 end
 
 # Users 생성
