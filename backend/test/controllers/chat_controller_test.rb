@@ -36,7 +36,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_equal "text/event-stream", response.headers["Content-Type"]
-      
+
       # Verify messages were cached in Redis
       cached_messages = MessageCacheService.get_cached_messages(@conversation.id)
       assert_equal 2, cached_messages.size
