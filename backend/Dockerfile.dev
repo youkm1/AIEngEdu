@@ -8,7 +8,9 @@ RUN apk add --no-cache \
     tzdata \
     curl \
     git \
-    bash
+    bash \
+    yaml-dev \
+    yaml
 
 WORKDIR /app
 

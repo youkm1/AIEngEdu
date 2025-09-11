@@ -56,6 +56,7 @@ class MessageCacheService
 
       Rails.logger.info "Starting message flush to database..."
 
+      # pending_messages에서 플러시
       loop do
         # 배치 단위로 메시지 가져오기
         messages_json = $redis.multi do |redis|
@@ -73,25 +74,79 @@ class MessageCacheService
         # DB 트랜잭션으로 배치 삽입
         ActiveRecord::Base.transaction do
           grouped_messages.each do |conversation_id, msg_batch|
+            # conversation이 실제로 존재하는지 확인
+            next unless Conversation.exists?(id: conversation_id)
+            
             messages_to_insert = msg_batch.map do |json|
               data = JSON.parse(json)
+              audio_metadata = data["audio_metadata"]
+              
               {
                 conversation_id: conversation_id,
                 role: data["role"],
                 content: data["content"],
+                has_user_audio: audio_metadata&.dig("has_audio") || false,
+                audio_format: audio_metadata&.dig("format"),
+                audio_duration: nil, # 실제 오디오 파일에서 추출해야 함
                 created_at: Time.at(data["timestamp"]),
                 updated_at: Time.at(data["timestamp"])
               }
             end
 
             # 벌크 인서트
-            Message.insert_all(messages_to_insert)
+            Message.insert_all(messages_to_insert) if messages_to_insert.any?
             flushed_count += messages_to_insert.size
           end
         end
       rescue => e
         errors << e.message
         Rails.logger.error "Flush error: #{e.message}"
+      end
+
+      # conversation별 메시지도 플러시 (fallback)
+      if flushed_count == 0
+        Rails.logger.info "No pending messages found, checking conversation caches..."
+        conversation_keys = $redis.keys("conversation:*:messages")
+        
+        conversation_keys.each do |key|
+          conversation_id = key.match(/conversation:(\d+):messages/)[1]
+          next unless Conversation.exists?(id: conversation_id)
+          
+          messages_json = $redis.lrange(key, 0, -1)
+          next if messages_json.empty?
+          
+          begin
+            ActiveRecord::Base.transaction do
+              messages_to_insert = messages_json.map do |json|
+                data = JSON.parse(json)
+                audio_metadata = data["audio_metadata"]
+                
+                {
+                  conversation_id: conversation_id,
+                  role: data["role"],
+                  content: data["content"],
+                  has_user_audio: audio_metadata&.dig("has_audio") || false,
+                  audio_format: audio_metadata&.dig("format"),
+                  audio_duration: nil,
+                  created_at: Time.at(data["timestamp"]),
+                  updated_at: Time.at(data["timestamp"])
+                }
+              end
+
+              # 중복 방지: 이미 DB에 있는 메시지는 제외
+              existing_message_ids = Message.where(conversation_id: conversation_id).pluck(:id)
+              
+              Message.insert_all(messages_to_insert) if messages_to_insert.any?
+              flushed_count += messages_to_insert.size
+              
+              # 성공적으로 플러시된 메시지는 캐시에서 제거
+              $redis.del(key)
+            end
+          rescue => e
+            errors << "Conversation #{conversation_id}: #{e.message}"
+            Rails.logger.error "Flush error for conversation #{conversation_id}: #{e.message}"
+          end
+        end
       end
 
       duration = (Time.current - start_time).round(2)

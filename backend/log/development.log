@@ -2554,3 +2554,278 @@ Processing by ChatController#message_audio as */*
 Completed 200 OK in 4749ms (Views: 0.6ms | ActiveRecord: 7.3ms (2 queries, 0 cached) | GC: 3.8ms)
 
 
+Started POST "/chat" for ::1 at 2025-09-12 03:42:01 +0900
+Processing by ChatController#create as */*
+  Parameters: {"title" => "자기소개하기", "user_id" => 1, "chat" => {"title" => "자기소개하기", "user_id" => 1}}
+  [1m[36mUser Load (55.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:231:in 'ChatController#current_user'
+  [1m[36mMembership Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mMembership Load (0.7ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-11' AND status = 'active') ORDER BY "memberships"."id" ASC LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:16:in 'User#active_membership'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:21:in 'ChatController#create'
+  [1m[36mConversation Create (2.5ms)[0m  [1m[32mINSERT INTO "conversations" ("user_id", "title", "created_at", "updated_at") VALUES (1, '자기소개하기', '2025-09-11 18:42:01.626758', '2025-09-11 18:42:01.626758') RETURNING "id" /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:21:in 'ChatController#create'
+  [1m[36mTRANSACTION (8.6ms)[0m  [1m[35mCOMMIT /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:21:in 'ChatController#create'
+Completed 200 OK in 116ms (Views: 0.5ms | ActiveRecord: 77.3ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 03:42:06 +0900
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x000000012f277178 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-18416-895b53.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "19", "user_id" => "1"}
+  [1m[36mUser Load (3.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:231:in 'ChatController#current_user'
+  [1m[36mMessage Load (5.9ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 19 AND (created_at < '2025-09-11 18:42:07.663853') ORDER BY "messages"."created_at" DESC LIMIT 19 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:138:in 'Enumerable#map'
+Completed 200 OK in 2134ms (Views: 0.4ms | ActiveRecord: 9.6ms (2 queries, 0 cached) | GC: 12.3ms)
+
+
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 03:42:18 +0900
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x000000012a91abb0 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-18416-l1bd4k.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "19", "user_id" => "1"}
+  [1m[36mUser Load (2.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:231:in 'ChatController#current_user'
+  [1m[36mMessage Load (2.9ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 19 AND (created_at < '2025-09-11 18:42:20.370179') ORDER BY "messages"."created_at" DESC LIMIT 17 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:138:in 'Enumerable#map'
+Completed 200 OK in 3551ms (Views: 0.2ms | ActiveRecord: 5.8ms (2 queries, 0 cached) | GC: 2.6ms)
+
+
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mMessage Count (71.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "messages" /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+Starting message flush to database...
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:88:in 'block (3 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (3.8ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","created_at","updated_at") VALUES (19, 'assistant', 'Okay, I understand. You''re saying "get used to." That sounds like you''re either:
+
+*   **Talking about something you''re trying to get used to:** Maybe a new situation, a new habit, a new environment, etc.
+*   **Giving advice to someone else:** Suggesting they need to get used to something.
+*   **Expressing resignation:** Acknowledging that you or someone else just has to accept a situation, even if it''s unpleasant.
+
+Could you tell me more about what you mean by "get used to"? Knowing the context would help me understand and respond better. For example:
+
+*   What are you trying to get used to?
+*   Who needs to get used to something?
+*   What''s the situation that requires getting used to?
+
+I''m here to listen and offer support or advice if you need it.
+', '2025-09-11 18:42:22.501705', '2025-09-11 18:42:22.501705'), (19, 'user', 'get used to.', '2025-09-11 18:42:20.370179', '2025-09-11 18:42:20.370179'), (19, 'assistant', 'You''re very welcome. I''m here to listen. What''s on your mind?
+', '2025-09-11 18:42:08.370643', '2025-09-11 18:42:08.370643'), (19, 'user', 'Hi, thanks for listening.', '2025-09-11 18:42:07.663853', '2025-09-11 18:42:07.663853') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:88:in 'block (3 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.4ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","created_at","updated_at") VALUES (18, 'assistant', 'This sounds like a line from an action movie or video game. It suggests a scenario where:
+
+*   **"Let''s get out of here."** indicates a need to escape a dangerous situation.
+*   **"Yeah, okay."** implies agreement and perhaps a sense of urgency.
+*   **"You''re going down, Grizzly."** is a threat directed at someone or something named "Grizzly," possibly the antagonist or a formidable opponent. It suggests a confrontation is imminent or unavoidable.
+
+The overall tone is one of determination and defiance in the face of danger.
+', '2025-09-11 18:29:04.083021', '2025-09-11 18:29:04.083021'), (18, 'user', 'Let''s get out of here. Yeah, okay. You''re going down, Grizzly.', '2025-09-11 18:29:02.445422', '2025-09-11 18:29:02.445422') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:88:in 'block (3 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.4ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","created_at","updated_at") VALUES (16, 'assistant', 'This is a pretty classic, slightly mischievous setup. Here''s what''s going on and why it''s funny:
+
+*   **Keg Party = Risky:** Keg parties, especially at someone''s house, often imply underage drinking and potential for things to get out of hand.
+
+*   **False Reassurance:** The speaker is trying to get the other person to come to the party by suggesting their parents will be okay with it because *their* parents will be supervising.
+
+*   **The Punchline:** The abrupt "they won''t be" reveals the deception. It''s a quick, comedic twist.
+
+*   **Segue to Lois:** The "And now a few words from Lois" is a non-sequitur. It abruptly changes the subject and adds to the comedic absurdity. It suggests that something else, potentially equally chaotic or random, is about to happen. It''s reminiscent of a cutaway gag in a show like *Family Guy*.
+
+**Overall Impression:** The tone is casual, confident, and slightly rebellious. The humor comes from the mix of teenage party tropes, the lie, and the unexpected transition.
+', '2025-09-11 18:21:47.127847', '2025-09-11 18:21:47.127847'), (16, 'user', 'I''m also having a celebratory keg party back at my house later. You can tell your parents that my parents will be there. they won''t be. And now a few words from Lois.', '2025-09-11 18:21:44.481454', '2025-09-11 18:21:44.481454') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:88:in 'block (3 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.4ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","created_at","updated_at") VALUES (11, 'assistant', 'Okay, so you''re having a disagreement about the Daily Growl being a real newspaper.
+
+Here''s how we can break this down:
+
+*   **You:** Saw the picture and are implying the Daily Growl is not a real newspaper.
+*   **The other person:** Insists the Daily Growl *is* a real newspaper.
+
+To figure out the truth, we need more information. Here are some questions to consider:
+
+*   **What is the Daily Growl?** Is it a school newspaper, a local blog, a satirical publication, or something else entirely?
+*   **What does "real paper" mean to each of you?** Does it mean a professionally printed newspaper with a large circulation? Or does it simply mean a publication that regularly publishes news, regardless of its format or distribution?
+
+Without more information, it''s impossible to say definitively whether the Daily Growl is "real" or not. It depends on the context and the criteria being used.
+', '2025-09-11 18:14:59.099419', '2025-09-11 18:14:59.099419'), (11, 'user', 'saw your picture in the Daily Growl. the Daily Growl is not a real paper. Yeah, it is.', '2025-09-11 18:14:56.562541', '2025-09-11 18:14:56.562541') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:88:in 'block (3 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.4ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","created_at","updated_at") VALUES (8, 'assistant', '', '2025-09-11 18:09:58.028386', '2025-09-11 18:09:58.028386'), (8, 'user', '', '2025-09-11 18:09:57.726333', '2025-09-11 18:09:57.726333') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:88:in 'block (3 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.9ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","created_at","updated_at") VALUES (999999, 'assistant', '', '2025-09-11 18:09:57.909175', '2025-09-11 18:09:57.909175'), (999999, 'user', 'Test message', '2025-09-11 18:09:57.553524', '2025-09-11 18:09:57.553524') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:88:in 'block (3 levels) in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:74:in 'block in MessageCacheService.flush_to_database'
+Flush error: PG::ForeignKeyViolation: ERROR:  insert or update on table "messages" violates foreign key constraint "fk_rails_7f927086d2"
+DETAIL:  Key (conversation_id)=(999999) is not present in table "conversations".
+
+Message flush completed: 12 messages in 0.09s
+Flush errors: PG::ForeignKeyViolation: ERROR:  insert or update on table "messages" violates foreign key constraint "fk_rails_7f927086d2"
+DETAIL:  Key (conversation_id)=(999999) is not present in table "conversations".
+
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mConversation Pluck (0.7ms)[0m  [1m[34mSELECT "conversations"."id" FROM "conversations" /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mMessage Count (42.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "messages" /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+Starting message flush to database...
+Message flush completed: 0 messages in 0.0s
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+Starting message flush to database...
+No pending messages found, checking conversation caches...
+  [1m[36mConversation Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "conversations" WHERE "conversations"."id" = 2 LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:113:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  ↳ app/models/message.rb:5:in '<class:Message>'
+  [1m[36mMessage Pluck (1.0ms)[0m  [1m[34mSELECT "messages"."id" FROM "messages" WHERE "messages"."conversation_id" = 2 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (1.4ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","has_user_audio","audio_format","audio_duration","created_at","updated_at") VALUES (2, 'assistant', 'Chunk 1Chunk 2', FALSE, NULL, NULL, '2025-09-11 18:09:57.703618', '2025-09-11 18:09:57.703618'), (2, 'user', 'Test streaming', FALSE, NULL, NULL, '2025-09-11 18:09:57.679136', '2025-09-11 18:09:57.679136'), (2, 'assistant', 'Test AI response', FALSE, NULL, NULL, '2025-09-11 18:09:57.589136', '2025-09-11 18:09:57.589136'), (2, 'user', 'Hello, AI!', FALSE, NULL, NULL, '2025-09-11 18:09:57.563731', '2025-09-11 18:09:57.563731') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:139:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (10.1ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:119:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mConversation Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "conversations" WHERE "conversations"."id" = 18 LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:113:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Pluck (1.0ms)[0m  [1m[34mSELECT "messages"."id" FROM "messages" WHERE "messages"."conversation_id" = 18 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.7ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","has_user_audio","audio_format","audio_duration","created_at","updated_at") VALUES (18, 'assistant', 'This sounds like a line from an action movie or video game. It suggests a scenario where:
+
+*   **"Let''s get out of here."** indicates a need to escape a dangerous situation.
+*   **"Yeah, okay."** implies agreement and perhaps a sense of urgency.
+*   **"You''re going down, Grizzly."** is a threat directed at someone or something named "Grizzly," possibly the antagonist or a formidable opponent. It suggests a confrontation is imminent or unavoidable.
+
+The overall tone is one of determination and defiance in the face of danger.
+', FALSE, NULL, NULL, '2025-09-11 18:29:04.083021', '2025-09-11 18:29:04.083021'), (18, 'user', 'Let''s get out of here. Yeah, okay. You''re going down, Grizzly.', TRUE, 'wav', NULL, '2025-09-11 18:29:02.445422', '2025-09-11 18:29:02.445422') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:139:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:119:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mConversation Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "conversations" WHERE "conversations"."id" = 11 LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:113:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Pluck (0.9ms)[0m  [1m[34mSELECT "messages"."id" FROM "messages" WHERE "messages"."conversation_id" = 11 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.6ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","has_user_audio","audio_format","audio_duration","created_at","updated_at") VALUES (11, 'assistant', 'Okay, so you''re having a disagreement about the Daily Growl being a real newspaper.
+
+Here''s how we can break this down:
+
+*   **You:** Saw the picture and are implying the Daily Growl is not a real newspaper.
+*   **The other person:** Insists the Daily Growl *is* a real newspaper.
+
+To figure out the truth, we need more information. Here are some questions to consider:
+
+*   **What is the Daily Growl?** Is it a school newspaper, a local blog, a satirical publication, or something else entirely?
+*   **What does "real paper" mean to each of you?** Does it mean a professionally printed newspaper with a large circulation? Or does it simply mean a publication that regularly publishes news, regardless of its format or distribution?
+
+Without more information, it''s impossible to say definitively whether the Daily Growl is "real" or not. It depends on the context and the criteria being used.
+', FALSE, NULL, NULL, '2025-09-11 18:14:59.099419', '2025-09-11 18:14:59.099419'), (11, 'user', 'saw your picture in the Daily Growl. the Daily Growl is not a real paper. Yeah, it is.', TRUE, 'wav', NULL, '2025-09-11 18:14:56.562541', '2025-09-11 18:14:56.562541') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:139:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:119:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mConversation Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "conversations" WHERE "conversations"."id" = 8 LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:113:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Pluck (0.9ms)[0m  [1m[34mSELECT "messages"."id" FROM "messages" WHERE "messages"."conversation_id" = 8 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.5ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","has_user_audio","audio_format","audio_duration","created_at","updated_at") VALUES (8, 'assistant', '', FALSE, NULL, NULL, '2025-09-11 18:09:58.028386', '2025-09-11 18:09:58.028386'), (8, 'user', '', FALSE, NULL, NULL, '2025-09-11 18:09:57.726333', '2025-09-11 18:09:57.726333') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:139:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:119:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mConversation Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "conversations" WHERE "conversations"."id" = 999999 LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:113:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mConversation Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "conversations" WHERE "conversations"."id" = 16 LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:113:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Pluck (0.9ms)[0m  [1m[34mSELECT "messages"."id" FROM "messages" WHERE "messages"."conversation_id" = 16 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.8ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","has_user_audio","audio_format","audio_duration","created_at","updated_at") VALUES (16, 'assistant', 'This is a pretty classic, slightly mischievous setup. Here''s what''s going on and why it''s funny:
+
+*   **Keg Party = Risky:** Keg parties, especially at someone''s house, often imply underage drinking and potential for things to get out of hand.
+
+*   **False Reassurance:** The speaker is trying to get the other person to come to the party by suggesting their parents will be okay with it because *their* parents will be supervising.
+
+*   **The Punchline:** The abrupt "they won''t be" reveals the deception. It''s a quick, comedic twist.
+
+*   **Segue to Lois:** The "And now a few words from Lois" is a non-sequitur. It abruptly changes the subject and adds to the comedic absurdity. It suggests that something else, potentially equally chaotic or random, is about to happen. It''s reminiscent of a cutaway gag in a show like *Family Guy*.
+
+**Overall Impression:** The tone is casual, confident, and slightly rebellious. The humor comes from the mix of teenage party tropes, the lie, and the unexpected transition.
+', FALSE, NULL, NULL, '2025-09-11 18:21:47.127847', '2025-09-11 18:21:47.127847'), (16, 'user', 'I''m also having a celebratory keg party back at my house later. You can tell your parents that my parents will be there. they won''t be. And now a few words from Lois.', TRUE, 'wav', NULL, '2025-09-11 18:21:44.481454', '2025-09-11 18:21:44.481454') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:139:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (2.3ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:119:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mConversation Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "conversations" WHERE "conversations"."id" = 19 LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:113:in 'block in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Pluck (0.9ms)[0m  [1m[34mSELECT "messages"."id" FROM "messages" WHERE "messages"."conversation_id" = 19 /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:137:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mMessage Bulk Insert (0.7ms)[0m  [1m[32mINSERT INTO "messages" ("conversation_id","role","content","has_user_audio","audio_format","audio_duration","created_at","updated_at") VALUES (19, 'assistant', 'Okay, I understand. You''re saying "get used to." That sounds like you''re either:
+
+*   **Talking about something you''re trying to get used to:** Maybe a new situation, a new habit, a new environment, etc.
+*   **Giving advice to someone else:** Suggesting they need to get used to something.
+*   **Expressing resignation:** Acknowledging that you or someone else just has to accept a situation, even if it''s unpleasant.
+
+Could you tell me more about what you mean by "get used to"? Knowing the context would help me understand and respond better. For example:
+
+*   What are you trying to get used to?
+*   Who needs to get used to something?
+*   What''s the situation that requires getting used to?
+
+I''m here to listen and offer support or advice if you need it.
+', FALSE, NULL, NULL, '2025-09-11 18:42:22.501705', '2025-09-11 18:42:22.501705'), (19, 'user', 'get used to.', TRUE, 'wav', NULL, '2025-09-11 18:42:20.370179', '2025-09-11 18:42:20.370179'), (19, 'assistant', 'You''re very welcome. I''m here to listen. What''s on your mind?
+', FALSE, NULL, NULL, '2025-09-11 18:42:08.370643', '2025-09-11 18:42:08.370643'), (19, 'user', 'Hi, thanks for listening.', TRUE, 'wav', NULL, '2025-09-11 18:42:07.663853', '2025-09-11 18:42:07.663853') ON CONFLICT  DO NOTHING RETURNING "id" /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:139:in 'block (2 levels) in MessageCacheService.flush_to_database'
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  ↳ app/services/message_cache_service.rb:119:in 'block in MessageCacheService.flush_to_database'
+Message flush completed: 16 messages in 0.15s
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mMessage Count (37.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "messages" /*application='RingleTask'*/[0m
+  [1m[36mMessage Pluck (0.3ms)[0m  [1m[34mSELECT "messages"."conversation_id", "messages"."role", "messages"."content" FROM "messages" LIMIT 3 /*application='RingleTask'*/[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+Sidekiq cron jobs scheduled successfully
+[dotenv] Loaded [33m.env.development[0m
+Sidekiq cron jobs scheduled successfully
+[dotenv] Loaded [33m.env.development[0m
+MessageFlushJob started
+Starting message flush to database...
+No pending messages found, checking conversation caches...
+Message flush completed: 0 messages in 0.0s
+MessageFlushJob completed successfully: 0 messages
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+MessageFlushJob started
+Starting message flush to database...
+No pending messages found, checking conversation caches...
+Message flush completed: 0 messages in 0.0s
+MessageFlushJob completed successfully: 0 messages
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
