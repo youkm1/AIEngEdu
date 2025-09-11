@@ -1998,3 +1998,250 @@ Processing by Api::MembershipsController#index as */*
 Completed 200 OK in 40ms (Views: 0.1ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 0.0ms)
 
 
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(3498774973763914635) /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='RingleTask'*/[0m
+Migrating to CreateCoupons (20250911174405)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[35m (41.0ms)[0m  [1m[35mCREATE TABLE "coupons" ("id" bigserial primary key, "user_id" bigint NOT NULL, "name" character varying NOT NULL, "total_uses" integer DEFAULT 1 NOT NULL, "used_count" integer DEFAULT 0 NOT NULL, "expires_at" timestamp(6) NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_69b54b3afe"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='RingleTask'*/[0m
+  [1m[35m (3.5ms)[0m  [1m[35mCREATE INDEX "index_coupons_on_user_id" ON "coupons" ("user_id") /*application='RingleTask'*/[0m
+  [1m[35m (3.6ms)[0m  [1m[35mCREATE INDEX "index_coupons_on_user_id_and_expires_at" ON "coupons" ("user_id", "expires_at") /*application='RingleTask'*/[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE INDEX "index_coupons_on_expires_at" ON "coupons" ("expires_at") /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250911174405') RETURNING "version" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.3ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(3498774973763914635) /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(3498774973763914635) /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.9ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='RingleTask'*/[0m
+Migrating to CreateCoupons (8)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[35m (3.3ms)[0m  [1m[35mCREATE TABLE "coupons" ("id" bigserial primary key, "user_id" bigint NOT NULL, "name" character varying NOT NULL, "total_uses" integer DEFAULT 1 NOT NULL, "used_count" integer DEFAULT 0 NOT NULL, "expires_at" timestamp(6) NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_69b54b3afe"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK /*application='RingleTask'*/[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(3498774973763914635) /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(3498774973763914635) /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='RingleTask'*/[0m
+Migrating to CreateCoupons (8)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE TABLE "coupons" ("id" bigserial primary key, "user_id" bigint NOT NULL, "name" character varying NOT NULL, "total_uses" integer DEFAULT 1 NOT NULL, "used_count" integer DEFAULT 0 NOT NULL, "expires_at" timestamp(6) NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_69b54b3afe"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK /*application='RingleTask'*/[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_advisory_unlock(3498774973763914635) /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (2.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mCoupon Create (3.8ms)[0m  [1m[32mINSERT INTO "coupons" ("user_id", "name", "total_uses", "used_count", "expires_at", "created_at", "updated_at") VALUES (1, 'Test Coupon', 5, 0, '2025-10-11 17:47:56.331870', '2025-09-11 17:47:56.344156', '2025-09-11 17:47:56.344156') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (14.9ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'user2@example.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Count (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "coupons" WHERE "coupons"."user_id" = 2 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 2 AND (expires_at > '2025-09-11 17:50:24.198751') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'admin@ringle.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 11 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 11 AND (expires_at > '2025-09-11 17:53:28.928160') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 11 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 11 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mMembership Load (1.1ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 11 AND (end_date >= '2025-09-11' AND status = 'active') ORDER BY "memberships"."id" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:16:in 'User#active_membership'
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'user1@example.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 1 AND (expires_at > '2025-09-11 17:53:28.941005') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 1 AND (expires_at > '2025-09-11 17:53:28.942873') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCoupon Load (1.0ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 1 AND (expires_at > '2025-09-11 17:53:28.943893') AND (used_count < total_uses) ORDER BY "coupons"."created_at" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:31:in 'User#next_available_coupon'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mMembership Load (0.7ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-11' AND status = 'active') ORDER BY "memberships"."id" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:16:in 'User#active_membership'
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'user2@example.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 2 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 2 AND (expires_at > '2025-09-11 17:53:28.951996') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 2 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 2 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mMembership Load (0.6ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 2 AND (end_date >= '2025-09-11' AND status = 'active') ORDER BY "memberships"."id" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:16:in 'User#active_membership'
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mUser Exists? (2.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'test_membership@example.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mUser Create (1.0ms)[0m  [1m[32mINSERT INTO "users" ("email", "name", "phone", "birth_date", "created_at", "updated_at") VALUES ('test_membership@example.com', 'Membership User', NULL, NULL, '2025-09-11 17:53:59.653583', '2025-09-11 17:53:59.653583') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (13.3ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (2.6ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 12 AND "memberships"."status" = 'active' AND "memberships"."status" = 'active' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mMembership Create (1.2ms)[0m  [1m[32mINSERT INTO "memberships" ("user_id", "membership_type", "start_date", "end_date", "price", "status", "created_at", "updated_at") VALUES (12, 'premium', '2025-09-12', '2025-10-11', NULL, 'active', '2025-09-11 17:53:59.687747', '2025-09-11 17:53:59.687747') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (6.8ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mCoupon Create (2.4ms)[0m  [1m[32mINSERT INTO "coupons" ("user_id", "name", "total_uses", "used_count", "expires_at", "created_at", "updated_at") VALUES (12, '테스트 쿠폰', 3, 0, '2025-10-11 17:53:59.698506', '2025-09-11 17:53:59.706893', '2025-09-11 17:53:59.706893') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.7ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 12 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 12 AND (expires_at > '2025-09-11 17:53:59.718363') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 12 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mMembership Load (1.2ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 12 AND (end_date >= '2025-09-11' AND status = 'active') ORDER BY "memberships"."id" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:16:in 'User#active_membership'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mUser Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'test_coupon@example.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("email", "name", "phone", "birth_date", "created_at", "updated_at") VALUES ('test_coupon@example.com', 'Coupon User', NULL, NULL, '2025-09-11 17:53:59.724789', '2025-09-11 17:53:59.724789') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (3.1ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mCoupon Create (1.9ms)[0m  [1m[32mINSERT INTO "coupons" ("user_id", "name", "total_uses", "used_count", "expires_at", "created_at", "updated_at") VALUES (13, '5회 이용권', 5, 0, '2025-10-11 17:53:59.729565', '2025-09-11 17:53:59.729799', '2025-09-11 17:53:59.729799') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.6ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 13 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 13 AND (expires_at > '2025-09-11 17:53:59.737513') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 13 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 13 AND (expires_at > '2025-09-11 17:53:59.739144') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCoupon Load (1.1ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 13 AND (expires_at > '2025-09-11 17:53:59.740251') AND (used_count < total_uses) ORDER BY "coupons"."created_at" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:31:in 'User#next_available_coupon'
+  [1m[36mCoupon Update All (5.1ms)[0m  [1m[33mUPDATE "coupons" SET "used_count" = COALESCE("used_count", 0) + 1 WHERE "coupons"."id" = 3 /*application='RingleTask'*/[0m
+  ↳ app/models/coupon.rb:39:in 'Coupon#use!'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mUser Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'test_nothing@example.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("email", "name", "phone", "birth_date", "created_at", "updated_at") VALUES ('test_nothing@example.com', 'No Access User', NULL, NULL, '2025-09-11 17:53:59.750370', '2025-09-11 17:53:59.750370') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.1ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 14 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 14 AND (expires_at > '2025-09-11 17:53:59.755328') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 14 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 14 AND (expires_at > '2025-09-11 17:53:59.756646') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 14 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 14 AND (expires_at > '2025-09-11 17:53:59.757847') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mUser Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'test_expired@example.com' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mUser Create (0.4ms)[0m  [1m[32mINSERT INTO "users" ("email", "name", "phone", "birth_date", "created_at", "updated_at") VALUES ('test_expired@example.com', 'Expired Membership User', NULL, NULL, '2025-09-11 17:53:59.760786', '2025-09-11 17:53:59.760786') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 15 AND "memberships"."status" = 'expired' AND "memberships"."status" = 'active' LIMIT 1 /*application='RingleTask'*/[0m
+  [1m[36mMembership Create (0.7ms)[0m  [1m[32mINSERT INTO "memberships" ("user_id", "membership_type", "start_date", "end_date", "price", "status", "created_at", "updated_at") VALUES (15, 'basic', '2025-07-11', '2025-09-04', NULL, 'expired', '2025-09-11 17:53:59.767473', '2025-09-11 17:53:59.767473') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mCoupon Create (1.8ms)[0m  [1m[32mINSERT INTO "coupons" ("user_id", "name", "total_uses", "used_count", "expires_at", "created_at", "updated_at") VALUES (15, '백업 쿠폰', 3, 0, '2025-09-18 17:53:59.771737', '2025-09-11 17:53:59.771930', '2025-09-11 17:53:59.771930') RETURNING "id" /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.3ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mMembership Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 15 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 15 AND (expires_at > '2025-09-11 17:53:59.778580') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCACHE Membership Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 15 AND (end_date >= '2025-09-11' AND status = 'active') LIMIT 1[0m
+  ↳ app/models/user.rb:11:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 15 AND (expires_at > '2025-09-11 17:53:59.780187') AND (used_count < total_uses) LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:26:in 'User#has_available_coupons?'
+  [1m[36mCoupon Load (0.8ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 15 AND (expires_at > '2025-09-11 17:53:59.781475') AND (used_count < total_uses) ORDER BY "coupons"."created_at" ASC LIMIT 1 /*application='RingleTask'*/[0m
+  ↳ app/models/user.rb:31:in 'User#next_available_coupon'
+  [1m[36mCoupon Update All (3.6ms)[0m  [1m[33mUPDATE "coupons" SET "used_count" = COALESCE("used_count", 0) + 1 WHERE "coupons"."id" = 4 /*application='RingleTask'*/[0m
+  ↳ app/models/coupon.rb:39:in 'Coupon#use!'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mMembership Load (2.0ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 12 /*application='RingleTask'*/[0m
+  [1m[36mMembership Destroy (0.8ms)[0m  [1m[31mDELETE FROM "memberships" WHERE "memberships"."id" = 12 /*application='RingleTask'*/[0m
+  [1m[36mConversation Load (0.8ms)[0m  [1m[34mSELECT "conversations".* FROM "conversations" WHERE "conversations"."user_id" = 12 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Load (0.5ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 12 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Destroy (0.4ms)[0m  [1m[31mDELETE FROM "coupons" WHERE "coupons"."id" = 2 /*application='RingleTask'*/[0m
+  [1m[36mUser Destroy (1.1ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = 12 /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.2ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mMembership Load (1.3ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 13 /*application='RingleTask'*/[0m
+  [1m[36mConversation Load (0.4ms)[0m  [1m[34mSELECT "conversations".* FROM "conversations" WHERE "conversations"."user_id" = 13 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Load (0.4ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 13 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Destroy (0.4ms)[0m  [1m[31mDELETE FROM "coupons" WHERE "coupons"."id" = 3 /*application='RingleTask'*/[0m
+  [1m[36mUser Destroy (0.7ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = 13 /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mMembership Load (1.3ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 14 /*application='RingleTask'*/[0m
+  [1m[36mConversation Load (0.4ms)[0m  [1m[34mSELECT "conversations".* FROM "conversations" WHERE "conversations"."user_id" = 14 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Load (0.3ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 14 /*application='RingleTask'*/[0m
+  [1m[36mUser Destroy (0.7ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = 14 /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN /*application='RingleTask'*/[0m
+  [1m[36mMembership Load (1.3ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 15 /*application='RingleTask'*/[0m
+  [1m[36mMembership Destroy (0.3ms)[0m  [1m[31mDELETE FROM "memberships" WHERE "memberships"."id" = 13 /*application='RingleTask'*/[0m
+  [1m[36mConversation Load (0.4ms)[0m  [1m[34mSELECT "conversations".* FROM "conversations" WHERE "conversations"."user_id" = 15 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Load (0.4ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 15 /*application='RingleTask'*/[0m
+  [1m[36mCoupon Destroy (0.4ms)[0m  [1m[31mDELETE FROM "coupons" WHERE "coupons"."id" = 4 /*application='RingleTask'*/[0m
+  [1m[36mUser Destroy (0.7ms)[0m  [1m[31mDELETE FROM "users" WHERE "users"."id" = 15 /*application='RingleTask'*/[0m
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (2.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[35m (65.4ms)[0m  [1m[31mDELETE FROM schema_migrations WHERE version = '20250911174405' /*application='RingleTask'*/[0m
+  [1m[35m (2.7ms)[0m  [1m[32mINSERT INTO schema_migrations (version) VALUES ('008') /*application='RingleTask'*/[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT version FROM schema_migrations ORDER BY version /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m

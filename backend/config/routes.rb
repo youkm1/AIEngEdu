@@ -12,6 +12,11 @@ Rails.application.routes.draw do
     
     resources :users do
       resources :memberships, only: [ :index, :create ]
+      resources :coupons do
+        collection do
+          get :available
+        end
+      end
     end
 
     resources :memberships, only: [ :show, :update, :destroy ] do

@@ -7,8 +7,42 @@ class ChatController < ApplicationController
       return render json: { error: "User not found" }, status: :unprocessable_entity
     end
 
+    # 멤버십 또는 쿠폰 확인 및 처리
+    result = current_user.process_conversation_start!
+    
+    if result[:type] == 'error'
+      return render json: { 
+        error: result[:message],
+        has_membership: current_user.has_active_membership?,
+        has_coupons: current_user.has_available_coupons?
+      }, status: :forbidden
+    end
+
     @conversation = current_user.conversations.create!(title: params[:title])
-    render json: @conversation
+    
+    response_data = @conversation.as_json
+    
+    # 응답에 사용된 방법 정보 추가
+    case result[:type]
+    when 'membership'
+      response_data[:access_method] = 'membership'
+      response_data[:membership_info] = {
+        type: result[:membership].membership_type,
+        end_date: result[:membership].end_date,
+        message: result[:message]
+      }
+    when 'coupon'
+      response_data[:access_method] = 'coupon'
+      response_data[:used_coupon] = {
+        id: result[:coupon].id,
+        name: result[:coupon].name,
+        remaining_uses: result[:coupon].remaining_uses,
+        total_uses: result[:coupon].total_uses,
+        message: result[:message]
+      }
+    end
+    
+    render json: response_data
   rescue => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
