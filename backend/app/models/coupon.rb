@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Coupon < ApplicationRecord
   belongs_to :user
 
@@ -35,7 +37,7 @@ class Coupon < ApplicationRecord
   # 쿠폰 사용
   def use!
     return false unless usable?
-    
+
     increment!(:used_count)
     true
   end

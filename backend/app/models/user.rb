@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :conversations, dependent: :destroy
@@ -44,8 +46,8 @@ class User < ApplicationRecord
   def process_conversation_start!
     # 활성 멤버십이 있으면 쿠폰 차감 없이 진행
     if has_active_membership?
-      return { 
-        type: 'membership', 
+      return {
+        type: 'membership',
         membership: active_membership,
         message: '멤버십을 사용하여 대화를 시작합니다.'
       }
@@ -55,8 +57,8 @@ class User < ApplicationRecord
     if has_available_coupons?
       used_coupon = use_coupon!
       if used_coupon
-        return { 
-          type: 'coupon', 
+        return {
+          type: 'coupon',
           coupon: used_coupon,
           message: '쿠폰을 사용하여 대화를 시작합니다.'
         }
@@ -64,8 +66,8 @@ class User < ApplicationRecord
     end
 
     # 둘 다 없으면 실패
-    return { 
-      type: 'error', 
+    {
+      type: 'error',
       message: '활성 멤버십 또는 사용 가능한 쿠폰이 필요합니다.'
     }
   end

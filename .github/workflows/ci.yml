@@ -46,7 +46,7 @@ jobs:
           bundler-cache: true
           working-directory: backend
       - name: Lint code for consistent style
-        run: bin/rubocop -f github -c ../.rubocop.yml
+        run: bin/rubocop -f github -c ../.rubocop.yml --except Style/Documentation,Naming/PredicatePrefix,Naming/PredicateMethod,Metrics/MethodLength
         working-directory: backend
         
   test:

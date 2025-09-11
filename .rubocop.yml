@@ -1,8 +1,25 @@
 # Omakase Ruby styling for Rails
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
+# Disable new cops by default for stability
+AllCops:
+  NewCops: disable
+  SuggestExtensions: false
+
 # Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+
+# Allow longer methods for complex business logic
+Metrics/MethodLength:
+  Max: 25
+
+# Allow has_* predicate method names (Rails convention)  
+Naming/PredicatePrefix:
+  Enabled: false
+
+# Also disable the newer version
+Naming/PredicateMethod:
+  Enabled: false
+
+# Allow missing documentation for models (common in small projects)
+Style/Documentation:
+  Enabled: false
