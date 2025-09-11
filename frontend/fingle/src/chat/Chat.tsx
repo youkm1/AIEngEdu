@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import apiService from '../services/api';
+import RecordRTC from 'recordrtc';
+import WaveSurfer from 'wavesurfer.js';
 
 interface Message {
   id: string;
@@ -24,11 +26,163 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
   const [conversationId, setConversationId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [recorder, setRecorder] = useState<RecordRTC | null>(null);
+  const [isProcessingAudio, setIsProcessingAudio] = useState<boolean>(false);
+  
+  const waveformRef = useRef<HTMLDivElement>(null);
+  const wavesurfer = useRef<WaveSurfer | null>(null);
 
-  // Auto scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Initialize waveform when recording starts
+  useEffect(() => {
+    if (isRecording && waveformRef.current) {
+      wavesurfer.current = WaveSurfer.create({
+        container: waveformRef.current,
+        waveColor: '#4F46E5',
+        progressColor: '#818CF8',
+        cursorColor: '#4F46E5',
+        barWidth: 3,
+        barRadius: 3,
+        height: 60,
+        normalize: true
+      });
+    }
+
+    return () => {
+      if (wavesurfer.current) {
+        wavesurfer.current.destroy();
+        wavesurfer.current = null;
+      }
+    };
+  }, [isRecording]);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      const newRecorder = new RecordRTC(stream, {
+        type: 'audio',
+        mimeType: 'audio/webm',
+        recorderType: RecordRTC.StereoAudioRecorder,
+        numberOfAudioChannels: 1,
+        desiredSampRate: 16000,
+      });
+
+      newRecorder.startRecording();
+      setRecorder(newRecorder);
+      setIsRecording(true);
+      setRecordedBlob(null);
+      setAudioUrl(null);
+      setError(null);
+    } catch (err) {
+      console.error('Error starting recording:', err);
+      setError('마이크 접근 권한이 필요합니다.');
+    }
+  };
+
+  // 스돕 recording
+  const stopRecording = () => {
+    if (recorder) {
+      recorder.stopRecording(() => {
+        const blob = recorder.getBlob();
+        setRecordedBlob(blob);
+        
+        const url = URL.createObjectURL(blob);
+        setAudioUrl(url);
+        
+        // Load the recorded audio into waveform
+        if (wavesurfer.current) {
+          wavesurfer.current.loadBlob(blob);
+        }
+        
+        // Clean up
+        recorder.destroy();
+        setRecorder(null);
+      });
+      
+      setIsRecording(false);
+    }
+  };
+
+  const cancelRecording = () => {
+    if (recorder) {
+      recorder.stopRecording(() => {
+        recorder.destroy();
+        setRecorder(null);
+      });
+    }
+    
+    setIsRecording(false);
+    setRecordedBlob(null);
+    setAudioUrl(null);
+    
+    if (wavesurfer.current) {
+      wavesurfer.current.destroy();
+      wavesurfer.current = null;
+    }
+  };
+
+  const sendAudioMessage = async () => {
+    if (!recordedBlob || !conversationId || !user) {
+      return;
+    }
+
+    setIsProcessingAudio(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('audio_file', recordedBlob, 'recording.webm');
+      formData.append('conversation_id', conversationId.toString());
+      formData.append('user_id', user.id.toString());
+
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/chat/message/audio`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('오디오 처리 실패');
+      }
+
+      const data = await response.json();
+      
+      // Add user message with transcribed text
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        role: 'user',
+        content: data.transcribed_text || '(음성 메시지)',
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, userMessage]);
+      
+      if (data.ai_response) {
+        const aiResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: data.ai_response,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, aiResponse]);
+      }
+      
+      cancelRecording();
+      
+    } catch (error) {
+      console.error('Failed to send audio message:', error);
+      setError('음성 메시지 전송에 실패했습니다.');
+    } finally {
+      setIsProcessingAudio(false);
+    }
+  };
 
   const startChat = async () => {
     if (!user) {
@@ -40,12 +194,10 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
       setIsLoading(true);
       setError(null);
       
-      // Create a new conversation
       const conversation = await apiService.createConversation('자기소개하기', user.id);
       setConversationId(conversation.id);
       setIsChatStarted(true);
       
-      // Add initial system message
       const systemMessage: Message = {
         id: Date.now().toString(),
         role: 'assistant',
@@ -82,21 +234,77 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
     setError(null);
 
     try {
-      // Send message to API (this would typically be a streaming response)
-      await apiService.sendMessage(conversationId, userMessage.content, user.id);
-      
-      // For now, add a mock AI response
-      // In a real implementation, you would handle the streaming response
-      setTimeout(() => {
-        const aiResponse: Message = {
+      // Use the streaming message API
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/chat/message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversation_id: conversationId,
+          message: userMessage.content,
+          user_id: user.id
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+
+      // Handle Server-Sent Events (SSE) for streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let aiResponseContent = '';
+      let aiMessageId = '';
+
+      if (reader) {
+        // Create initial AI message for streaming
+        const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: '좋은 자기소개네요! 좀 더 구체적으로 본인의 역할과 경험에 대해 말씀해주실 수 있나요?',
+          content: '',
           timestamp: new Date()
         };
-        setMessages(prev => [...prev, aiResponse]);
-        setIsLoading(false);
-      }, 1500);
+        aiMessageId = aiMessage.id;
+        setMessages(prev => [...prev, aiMessage]);
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data === '[DONE]') {
+                  setIsLoading(false);
+                  break;
+                } else {
+                  try {
+                    const parsedData = JSON.parse(data);
+                    if (typeof parsedData === 'string') {
+                      aiResponseContent += parsedData;
+                      // Update the AI message with streaming content
+                      setMessages(prev => prev.map(msg => 
+                        msg.id === aiMessageId 
+                          ? { ...msg, content: aiResponseContent }
+                          : msg
+                      ));
+                    }
+                  } catch (parseError) {
+                    // Ignore JSON parse errors for streaming data
+                  }
+                }
+              }
+            }
+          }
+        } finally {
+          reader.releaseLock();
+        }
+      }
       
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -105,12 +313,6 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage(e as any);
-    }
-  };
 
   if (!isChatStarted) {
     return (
@@ -259,24 +461,102 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
           </div>
         )}
         
-        <form onSubmit={sendMessage} className="flex space-x-6">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="메시지를 입력하세요..."
-            className="flex-1 border border-gray-300 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
-            disabled={isLoading}
-          />
-          <button
-            type="submit"
-            disabled={isLoading || !inputMessage.trim()}
-            className="bg-indigo-600 text-white rounded-2xl px-12 py-6 text-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
-          >
-            전송
-          </button>
-        </form>
+        {/* Audio Recording Section */}
+        {(isRecording || recordedBlob) && (
+          <div className="mb-6 p-6 bg-gray-50 rounded-2xl">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                {isRecording && (
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse mr-3"></div>
+                    <span className="text-lg font-semibold text-gray-700">녹음 중...</span>
+                  </div>
+                )}
+                {!isRecording && recordedBlob && (
+                  <span className="text-lg font-semibold text-gray-700">녹음 완료</span>
+                )}
+              </div>
+              <div className="flex gap-3">
+                {isRecording && (
+                  <button
+                    onClick={stopRecording}
+                    className="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors font-semibold"
+                  >
+                    정지
+                  </button>
+                )}
+                {!isRecording && recordedBlob && (
+                  <>
+                    <button
+                      onClick={sendAudioMessage}
+                      disabled={isProcessingAudio}
+                      className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-semibold disabled:opacity-50"
+                    >
+                      {isProcessingAudio ? '처리 중...' : '음성 전송'}
+                    </button>
+                    <button
+                      onClick={cancelRecording}
+                      className="px-6 py-3 bg-gray-300 text-gray-700 rounded-xl hover:bg-gray-400 transition-colors font-semibold"
+                    >
+                      취소
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+            
+            {/* Waveform Visualization */}
+            <div ref={waveformRef} className="w-full bg-white rounded-xl p-4"></div>
+            
+            {/* Audio Playback */}
+            {audioUrl && !isRecording && (
+              <audio controls className="w-full mt-4">
+                <source src={audioUrl} type="audio/webm" />
+              </audio>
+            )}
+          </div>
+        )}
+        
+        {/* Text/Audio Input Toggle */}
+        <div className="flex space-x-6">
+          <form onSubmit={sendMessage} className="flex-1 flex space-x-4">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage(e as any);
+                }
+              }}
+              placeholder="메시지를 입력하세요..."
+              className="flex-1 border border-gray-300 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
+              disabled={isLoading || isRecording}
+            />
+            <button
+              type="submit"
+              disabled={isLoading || !inputMessage.trim() || isRecording}
+              className="bg-indigo-600 text-white rounded-2xl px-12 py-6 text-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
+            >
+              전송
+            </button>
+          </form>
+          
+          {/* Microphone Button */}
+          {!isRecording && !recordedBlob && (
+            <button
+              onClick={startRecording}
+              disabled={isLoading}
+              className="bg-red-500 text-white rounded-2xl px-8 py-6 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
+              title="음성 녹음"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

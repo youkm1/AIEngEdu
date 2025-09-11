@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   # Chat routes
   post "chat", to: "chat#create"
   post "chat/message", to: "chat#message", as: :chat_message
+  post "chat/message/audio", to: "chat#message_audio", as: :chat_message_audio
   post "chat/simple", to: "chat#simple_message"  # 테스트용
   get "chat/:id/history", to: "chat#history", as: :chat_history
   get "chat/cache/status", to: "chat#cache_status"

@@ -31,6 +31,54 @@ class GeminiService
     "죄송합니다. 서비스 오류가 발생했습니다."
   end
 
+  # Transcribe audio using Gemini's multimodal capabilities
+  def transcribe_audio(audio_file)
+    # Convert audio file to base64
+    audio_data = Base64.strict_encode64(audio_file.read)
+    
+    response = self.class.post(
+      "/models/#{@model}:generateContent",
+      headers: {
+        "Content-Type" => "application/json",
+        "X-goog-api-key" => @api_key
+      },
+      body: {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                inline_data: {
+                  mime_type: audio_file.content_type || "audio/webm",
+                  data: audio_data
+                }
+              },
+              {
+                text: "Please transcribe this audio to text. Return only the transcribed text without any additional formatting or explanation."
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.1,
+          maxOutputTokens: 1024,
+          topP: 1,
+          topK: 1
+        }
+      }.to_json
+    )
+
+    if response.success?
+      extract_text_from_response(response).strip
+    else
+      Rails.logger.error "Gemini Audio Transcription Error: #{response.code} - #{response.body}"
+      "음성을 텍스트로 변환할 수 없습니다."
+    end
+  rescue => e
+    Rails.logger.error "Audio Transcription Error: #{e.message}"
+    "음성 변환 중 오류가 발생했습니다."
+  end
+
   def stream_chat(message, conversation_history = [])
     uri = URI("https://generativelanguage.googleapis.com/v1beta/models/#{@model}:streamGenerateContent?alt=sse")
 

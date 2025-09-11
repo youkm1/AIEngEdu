@@ -47,6 +47,66 @@ class ChatController < ApplicationController
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  # Audio message endpoint with STT
+  def message_audio
+    unless current_user
+      return render json: { error: "User not found" }, status: :unprocessable_entity
+    end
+
+    audio_file = params[:audio_file]
+    conversation_id = params[:conversation_id]
+    
+    unless audio_file && conversation_id
+      return render json: { error: "Missing audio file or conversation ID" }, status: :bad_request
+    end
+
+    begin
+      # Use Gemini for Speech-to-Text
+      gemini = GeminiService.new
+      transcribed_text = gemini.transcribe_audio(audio_file)
+      
+      # Cache the message with audio metadata
+      user_message_id = MessageCacheService.cache_message(
+        conversation_id,
+        "user",
+        transcribed_text,
+        audio_metadata: {
+          has_audio: true,
+          format: audio_file.content_type&.split("/")&.last || "webm",
+          size: audio_file.size,
+          filename: audio_file.original_filename
+        }
+      )
+      
+      # Get conversation history
+      conversation_history = MessageCacheService.get_message_history(
+        conversation_id,
+        limit: 20
+      ).map { |m| { role: m[:role], content: m[:content] } }
+      
+      # Get AI response
+      ai_response = gemini.chat(transcribed_text, conversation_history)
+      
+      # Cache AI response
+      ai_message_id = MessageCacheService.cache_message(
+        conversation_id,
+        "assistant",
+        ai_response
+      )
+      
+      render json: {
+        success: true,
+        transcribed_text: transcribed_text,
+        ai_response: ai_response,
+        user_message_id: user_message_id,
+        ai_message_id: ai_message_id
+      }
+    rescue => e
+      Rails.logger.error "Audio processing error: #{e.message}"
+      render json: { error: "오디오 처리 중 오류가 발생했습니다: #{e.message}" }, status: :internal_server_error
+    end
+  end
+
   def message
     response.headers["Content-Type"] = "text/event-stream"
     response.headers["Cache-Control"] = "no-cache"
