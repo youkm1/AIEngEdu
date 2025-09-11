@@ -86,13 +86,27 @@ npm test -- --coverage      # 커버리지 포함
 ```
 
 #### 테스트 현황
-- ✅ **Setup & Mock Tests**: 4/4 통과
-- ✅ **API Service Tests**: 9/9 통과  
-- ✅ **App Render Tests**: 1/1 통과
-- ✅ **Home Component Tests**: 12/12 통과 (100%)
-- ✅ **Chat Component Tests**: 9/9 통과 (100%)
 
-**총 35/35 테스트 통과 (100%)**
+**Frontend (React/TypeScript)**
+- **Setup & Mock Tests**: 4/4 통과
+- **API Service Tests**: 9/9 통과  
+- **App Render Tests**: 1/1 통과
+- **Home Component Tests**: 12/12 통과
+- **Chat Component Tests**: 9/9 통과
+
+**Frontend 총합: 35/35 테스트 통과 (100%)**
+
+**Backend (Ruby on Rails)**
+- **Model Tests**: 전체 통과 (Membership 모델 포함)
+- **Service Tests**: 전체 통과 (MessageCacheService, MockTossPaymentsService 포함)
+- **Controller Tests**: 전체 통과 (Admin Memberships API 포함)
+- **Job Tests**: 전체 통과 (MessageFlushJob 포함)
+- **Integration Tests**: 전체 통과 (멤버십 결제 플로우 포함)
+
+**주요 백엔드 테스트 기능:**
+-  **멤버십 할당**: 어드민 멤버십 부여 API (인증/인가, 할당/삭제)
+-  **유저 결제 API**: 멤버십 결제 진행, 토스 페이먼츠 Mock 연동
+-  **PG사 결제 API**: Mock 객체를 통한 결제 시뮬레이션 테스트
 
 ## 🔧 주요 기능
 
