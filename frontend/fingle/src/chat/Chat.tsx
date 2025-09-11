@@ -31,6 +31,7 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [recorder, setRecorder] = useState<RecordRTC | null>(null);
   const [isProcessingAudio, setIsProcessingAudio] = useState<boolean>(false);
+  const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
   
   const waveformRef = useRef<HTMLDivElement>(null);
   const wavesurfer = useRef<WaveSurfer | null>(null);
@@ -39,7 +40,6 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Initialize waveform when recording starts
   useEffect(() => {
     if (isRecording && waveformRef.current) {
       wavesurfer.current = WaveSurfer.create({
@@ -126,6 +126,38 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
       wavesurfer.current.destroy();
       wavesurfer.current = null;
     }
+  };
+
+  const playTextToSpeech = (text: string, messageId: string) => {
+    if (playingMessageId === messageId) {
+      // Stop current speech
+      window.speechSynthesis.cancel();
+      setPlayingMessageId(null);
+      return;
+    }
+
+    // Stop any existing speech
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 0.8;
+    
+    utterance.onstart = () => {
+      setPlayingMessageId(messageId);
+    };
+    
+    utterance.onend = () => {
+      setPlayingMessageId(null);
+    };
+    
+    utterance.onerror = () => {
+      setPlayingMessageId(null);
+    };
+    
+    window.speechSynthesis.speak(utterance);
   };
 
   const sendAudioMessage = async () => {
@@ -329,7 +361,28 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
                     : 'bg-white text-gray-800 border border-gray-200'
                 }`}
               >
-                <p className="text-2xl leading-relaxed">{message.content}</p>
+                <div className="flex items-start justify-between">
+                  <p className="text-2xl leading-relaxed flex-1 mr-4">{message.content}</p>
+                  <button
+                    onClick={() => playTextToSpeech(message.content, message.id)}
+                    className={`flex-shrink-0 p-3 rounded-full transition-colors ${
+                      playingMessageId === message.id
+                        ? (message.role === 'user' ? 'bg-indigo-500 hover:bg-indigo-400' : 'bg-gray-200 hover:bg-gray-300')
+                        : (message.role === 'user' ? 'bg-indigo-700 hover:bg-indigo-600' : 'bg-gray-100 hover:bg-gray-200')
+                    }`}
+                    title={playingMessageId === message.id ? '재생 중지' : '음성 재생'}
+                  >
+                    {playingMessageId === message.id ? (
+                      <svg className={`w-6 h-6 ${message.role === 'user' ? 'text-white' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
+                      </svg>
+                    ) : (
+                      <svg className={`w-6 h-6 ${message.role === 'user' ? 'text-white' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M9 10V8a1 1 0 011-1h4a1 1 0 011 1v2M9 10v4a1 1 0 001 1h4a1 1 0 001-1v-4" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
                 <p className={`text-base mt-3 ${
                   message.role === 'user' ? 'text-indigo-100' : 'text-gray-400'
                 }`}>
