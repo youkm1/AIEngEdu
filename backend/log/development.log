@@ -2831,3 +2831,8 @@ MessageFlushJob completed successfully: 0 messages
 [dotenv] Loaded [33m.env.development[0m
 [dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
 [dotenv] Loaded [33m.env.development[0m
+MessageFlushJob started
+Starting message flush to database...
+No pending messages found, checking conversation caches...
+Message flush completed: 0 messages in 0.0s
+MessageFlushJob completed successfully: 0 messages
