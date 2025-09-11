@@ -20,7 +20,6 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputMessage, setInputMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isChatStarted, setIsChatStarted] = useState<boolean>(false);
   const [conversationId, setConversationId] = useState<number | null>(null);
@@ -214,104 +213,6 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
     }
   };
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!inputMessage.trim() || !conversationId || !user) {
-      return;
-    }
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: inputMessage.trim(),
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Use the streaming message API
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/chat/message`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          conversation_id: conversationId,
-          message: userMessage.content,
-          user_id: user.id
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
-
-      // Handle Server-Sent Events (SSE) for streaming response
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let aiResponseContent = '';
-      let aiMessageId = '';
-
-      if (reader) {
-        // Create initial AI message for streaming
-        const aiMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: '',
-          timestamp: new Date()
-        };
-        aiMessageId = aiMessage.id;
-        setMessages(prev => [...prev, aiMessage]);
-
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value);
-            const lines = chunk.split('\n');
-
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6);
-                if (data === '[DONE]') {
-                  setIsLoading(false);
-                  break;
-                } else {
-                  try {
-                    const parsedData = JSON.parse(data);
-                    if (typeof parsedData === 'string') {
-                      aiResponseContent += parsedData;
-                      // Update the AI message with streaming content
-                      setMessages(prev => prev.map(msg => 
-                        msg.id === aiMessageId 
-                          ? { ...msg, content: aiResponseContent }
-                          : msg
-                      ));
-                    }
-                  } catch (parseError) {
-                    // Ignore JSON parse errors for streaming data
-                  }
-                }
-              }
-            }
-          }
-        } finally {
-          reader.releaseLock();
-        }
-      }
-      
-    } catch (error) {
-      console.error('Failed to send message:', error);
-      setError('메시지를 보낼 수 없습니다. 다시 시도해주세요.');
-      setIsLoading(false);
-    }
-  };
 
 
   if (!isChatStarted) {
@@ -350,6 +251,7 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
                 <span className="bg-indigo-100 text-indigo-700 text-lg font-semibold px-6 py-3 rounded-xl">시나리오</span>
                 <div className="bg-white p-8 rounded-3xl border border-gray-200 mt-6 shadow-lg">
                   <p className="text-gray-700 text-xl leading-relaxed">새로운 사람을 만나는 비즈니스 환경에서 본인을 소개해보세요!</p>
+                  <p className="text-indigo-600 text-lg font-semibold mt-4">🎤 음성으로만 대화할 수 있습니다</p>
                 </div>
               </div>
               
@@ -362,7 +264,7 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
                   </div>
                   <h2 className="font-bold text-gray-900 text-xl">마이크 사용 권한</h2>
                 </div>
-                <p className="text-gray-700 text-lg">링글 AI와 영어로 대화를 나누기 위해서는 마이크 사용 권한이 필요해요.</p>
+                <p className="text-gray-700 text-lg">링글 AI와 음성으로 영어 대화를 나누기 위해서는 마이크 사용 권한이 필요해요.</p>
               </div>
               
               {error && (
@@ -517,43 +419,22 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
           </div>
         )}
         
-        {/* Text/Audio Input Toggle */}
-        <div className="flex space-x-6">
-          <form onSubmit={sendMessage} className="flex-1 flex space-x-4">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  sendMessage(e as any);
-                }
-              }}
-              placeholder="메시지를 입력하세요..."
-              className="flex-1 border border-gray-300 rounded-2xl px-8 py-6 text-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-50"
-              disabled={isLoading || isRecording}
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !inputMessage.trim() || isRecording}
-              className="bg-indigo-600 text-white rounded-2xl px-12 py-6 text-xl font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
-            >
-              전송
-            </button>
-          </form>
-          
+        {/* Audio-Only Input */}
+        <div className="flex justify-center">
           {/* Microphone Button */}
           {!isRecording && !recordedBlob && (
             <button
               onClick={startRecording}
               disabled={isLoading}
-              className="bg-red-500 text-white rounded-2xl px-8 py-6 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
-              title="음성 녹음"
+              className="bg-red-500 text-white rounded-3xl px-12 py-8 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg transform hover:scale-105"
+              title="음성 녹음으로 대화하기"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
+              <div className="flex items-center space-x-4">
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                <span className="text-2xl font-semibold">음성으로 대화하기</span>
+              </div>
             </button>
           )}
         </div>
