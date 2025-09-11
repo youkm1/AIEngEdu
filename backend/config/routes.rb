@@ -4,6 +4,12 @@ Rails.application.routes.draw do
 
   # API routes
   namespace :api do
+    # Auth routes
+    namespace :auth do
+      post :login
+      get :me
+    end
+    
     resources :users do
       resources :memberships, only: [ :index, :create ]
     end
