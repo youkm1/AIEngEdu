@@ -1,17 +1,16 @@
+# frozen_string_literal: true
+
 class ChatController < ApplicationController
   include ActionController::Live
   skip_before_action :verify_authenticity_token
 
   def create
-    unless current_user
-      return render json: { error: "User not found" }, status: :unprocessable_entity
-    end
+    return render json: { error: 'User not found' }, status: :unprocessable_entity unless current_user
 
     # 멤버십 또는 쿠폰 확인 및 처리
     result = current_user.process_conversation_start!
-    
     if result[:type] == 'error'
-      return render json: { 
+      return render json: {
         error: result[:message],
         has_membership: current_user.has_active_membership?,
         has_coupons: current_user.has_available_coupons?
@@ -19,9 +18,9 @@ class ChatController < ApplicationController
     end
 
     @conversation = current_user.conversations.create!(title: params[:title])
-    
+
     response_data = @conversation.as_json
-    
+
     # 응답에 사용된 방법 정보 추가
     case result[:type]
     when 'membership'
@@ -41,59 +40,57 @@ class ChatController < ApplicationController
         message: result[:message]
       }
     end
-    
+
     render json: response_data
-  rescue => e
+  rescue StandardError => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
   # Audio message endpoint with STT
   def message_audio
-    unless current_user
-      return render json: { error: "User not found" }, status: :unprocessable_entity
-    end
+    return render json: { error: 'User not found' }, status: :unprocessable_entity unless current_user
 
     audio_file = params[:audio_file]
     conversation_id = params[:conversation_id]
-    
+
     unless audio_file && conversation_id
-      return render json: { error: "Missing audio file or conversation ID" }, status: :bad_request
+      return render json: { error: 'Missing audio file or conversation ID' }, status: :bad_request
     end
 
     begin
       # Use Gemini for Speech-to-Text
       gemini = GeminiService.new
       transcribed_text = gemini.transcribe_audio(audio_file)
-      
+
       # Cache the message with audio metadata
       user_message_id = MessageCacheService.cache_message(
         conversation_id,
-        "user",
+        'user',
         transcribed_text,
         audio_metadata: {
           has_audio: true,
-          format: audio_file.content_type&.split("/")&.last || "webm",
+          format: audio_file.content_type&.split('/')&.last || 'webm',
           size: audio_file.size,
           filename: audio_file.original_filename
         }
       )
-      
+
       # Get conversation history
       conversation_history = MessageCacheService.get_message_history(
         conversation_id,
         limit: 20
       ).map { |m| { role: m[:role], content: m[:content] } }
-      
+
       # Get AI response
       ai_response = gemini.chat(transcribed_text, conversation_history)
-      
+
       # Cache AI response
       ai_message_id = MessageCacheService.cache_message(
         conversation_id,
-        "assistant",
+        'assistant',
         ai_response
       )
-      
+
       render json: {
         success: true,
         transcribed_text: transcribed_text,
@@ -101,16 +98,16 @@ class ChatController < ApplicationController
         user_message_id: user_message_id,
         ai_message_id: ai_message_id
       }
-    rescue => e
+    rescue StandardError => e
       Rails.logger.error "Audio processing error: #{e.message}"
       render json: { error: "오디오 처리 중 오류가 발생했습니다: #{e.message}" }, status: :internal_server_error
     end
   end
 
   def message
-    response.headers["Content-Type"] = "text/event-stream"
-    response.headers["Cache-Control"] = "no-cache"
-    response.headers["X-Accel-Buffering"] = "no"
+    response.headers['Content-Type'] = 'text/event-stream'
+    response.headers['Cache-Control'] = 'no-cache'
+    response.headers['X-Accel-Buffering'] = 'no'
 
     gemini = GeminiService.new
     message = params[:message]
@@ -120,7 +117,7 @@ class ChatController < ApplicationController
     # 사용자 메시지 Redis 캐싱 (비동기) + 오디오 메타데이터
     user_message_id = MessageCacheService.cache_message(
       conversation_id,
-      "user",
+      'user',
       message,
       audio_metadata: extract_audio_metadata(audio_file)
     )
@@ -132,7 +129,7 @@ class ChatController < ApplicationController
     ).map { |m| { role: m[:role], content: m[:content] } }
 
     # AI 응답 스트리밍
-    ai_response = ""
+    ai_response = ''
 
     gemini.stream_chat(message, conversation_history) do |chunk|
       if chunk && !chunk.empty?
@@ -143,17 +140,17 @@ class ChatController < ApplicationController
 
         # Redis Pub/Sub로 다른 클라이언트에게도 브로드캐스트
         MessageCacheService.publish_message(conversation_id, {
-          type: "chunk",
-          content: chunk,
-          message_id: user_message_id
-        })
+                                              type: 'chunk',
+                                              content: chunk,
+                                              message_id: user_message_id
+                                            })
       end
     end
 
     # AI 응답 Redis 캐싱 (비동기)
     ai_message_id = MessageCacheService.cache_message(
       conversation_id,
-      "assistant",
+      'assistant',
       ai_response
     )
 
@@ -162,12 +159,11 @@ class ChatController < ApplicationController
 
     # 완료 브로드캐스트
     MessageCacheService.publish_message(conversation_id, {
-      type: "complete",
-      user_message_id: user_message_id,
-      ai_message_id: ai_message_id
-    })
-
-  rescue => e
+                                          type: 'complete',
+                                          user_message_id: user_message_id,
+                                          ai_message_id: ai_message_id
+                                        })
+  rescue StandardError => e
     Rails.logger.error "SSE Error: #{e.message}"
     response.stream.write "data: {\"error\": \"#{e.message}\"}\n\n"
   ensure
@@ -198,7 +194,7 @@ class ChatController < ApplicationController
   # 수동 플러시 트리거 (관리자용)
   def flush_cache
     MessageFlushJob.perform_async
-    render json: { message: "Flush job enqueued" }
+    render json: { message: 'Flush job enqueued' }
   end
 
   # 테스트용 논스트리밍 API
@@ -211,8 +207,8 @@ class ChatController < ApplicationController
     ai_response = gemini.chat(message, [])
 
     # Redis 캐싱
-    MessageCacheService.cache_message(conversation_id, "user", message)
-    MessageCacheService.cache_message(conversation_id, "assistant", ai_response)
+    MessageCacheService.cache_message(conversation_id, 'user', message)
+    MessageCacheService.cache_message(conversation_id, 'assistant', ai_response)
 
     render json: {
       user_message: message,
@@ -220,7 +216,7 @@ class ChatController < ApplicationController
       conversation_id: conversation_id,
       timestamp: Time.current
     }
-  rescue => e
+  rescue StandardError => e
     render json: { error: e.message }, status: :internal_server_error
   end
 
@@ -236,11 +232,11 @@ class ChatController < ApplicationController
 
     {
       has_audio: true,
-      format: audio_file.content_type&.split("/")&.last || "unknown",
+      format: audio_file.content_type&.split('/')&.last || 'unknown',
       size: audio_file.size,
       filename: audio_file.original_filename
     }
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "Audio metadata extraction failed: #{e.message}"
     nil
   end
