@@ -51,6 +51,7 @@ export const mockMessages = [
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   initialUser?: typeof mockUser | null;
   route?: string;
+  authProps?: Partial<any>;
 }
 
 export function renderWithProviders(
@@ -58,18 +59,20 @@ export function renderWithProviders(
   {
     initialUser = mockUser,
     route = '/',
+    authProps = {},
     ...renderOptions
   }: CustomRenderOptions = {}
 ) {
-  // Mock AuthContext value
+  // Mock AuthContext value with proper methods
   const mockAuthValue = {
     user: initialUser,
     isLoggedIn: !!initialUser,
     isLoading: false,
-    login: jest.fn(),
+    login: jest.fn().mockImplementation(async () => Promise.resolve()),
     logout: jest.fn(),
     error: null,
-    clearError: jest.fn()
+    clearError: jest.fn(),
+    ...authProps
   };
 
   function Wrapper({ children }: { children: React.ReactNode }) {
@@ -87,7 +90,10 @@ export function renderWithProviders(
     );
   }
 
-  return render(ui, { wrapper: Wrapper, ...renderOptions });
+  return { 
+    ...render(ui, { wrapper: Wrapper, ...renderOptions }),
+    mockAuthValue
+  };
 }
 
 // Mock API responses

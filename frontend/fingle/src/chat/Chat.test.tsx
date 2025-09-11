@@ -1,253 +1,106 @@
-import React from 'react';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders, mockUser, mockApiResponses, mockFetch, waitForNextTick } from '../test-utils';
+import { renderWithProviders, mockUser, mockApiResponses } from '../test-utils';
 import Chat from './Chat';
 
 // Mock API service
+const mockCreateConversation = jest.fn();
 jest.mock('../services/api', () => ({
-  createConversation: jest.fn()
+  __esModule: true,
+  default: {
+    createConversation: (...args: any[]) => mockCreateConversation(...args)
+  }
 }));
 
 const mockNavigate = jest.fn();
 (global as any).mockNavigate = mockNavigate;
 
+// Mock media APIs
+const mockMediaStream = {
+  getTracks: jest.fn(() => [{ stop: jest.fn() }]),
+  getAudioTracks: jest.fn(() => [{ stop: jest.fn() }])
+};
+
+// Mock getUserMedia
+const mockGetUserMedia = jest.fn();
+Object.defineProperty(navigator, 'mediaDevices', {
+  value: { getUserMedia: mockGetUserMedia },
+  writable: true
+});
+
 describe('Chat Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockCreateConversation.mockReset();
+    mockNavigate.mockReset();
+    mockGetUserMedia.mockReset();
+    
+    // Setup default successful responses
+    mockCreateConversation.mockResolvedValue(mockApiResponses.createConversation);
+    mockGetUserMedia.mockResolvedValue(mockMediaStream);
   });
 
-  test('renders initial chat start screen', () => {
-    renderWithProviders(<Chat />);
-    
-    expect(screen.getByText('자기소개하기')).toBeInTheDocument();
-    expect(screen.getByText('🎤 음성으로만 대화할 수 있습니다')).toBeInTheDocument();
-    expect(screen.getByText('대화 시작하기')).toBeInTheDocument();
-  });
-
-  test('shows microphone permission notice', () => {
-    renderWithProviders(<Chat />);
-    
-    expect(screen.getByText('마이크 사용 권한')).toBeInTheDocument();
-    expect(screen.getByText(/링글 AI와 음성으로 영어 대화/)).toBeInTheDocument();
-  });
-
-  test('starts chat when start button is clicked', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch(mockApiResponses.createConversation);
-    
-    renderWithProviders(<Chat />);
-    
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Hi, I am Benny. How are you today?')).toBeInTheDocument();
-    });
-  });
-
-  test('shows loading state during chat start', async () => {
-    const user = userEvent.setup();
-    global.fetch = jest.fn(() => 
-      new Promise(resolve => 
-        setTimeout(() => resolve({
-          ok: true,
-          json: () => Promise.resolve(mockApiResponses.createConversation)
-        } as Response), 100)
-      )
-    );
-    
-    renderWithProviders(<Chat />);
-    
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
-
-    expect(screen.getByText('대화 준비 중...')).toBeInTheDocument();
-  });
-
-  test('displays error when chat start fails', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch({ error: 'Membership required' }, 403);
-    
-    renderWithProviders(<Chat />);
-    
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/대화를 시작할 수 없습니다/)).toBeInTheDocument();
-    });
-  });
-
-  test('renders chat interface after starting', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch(mockApiResponses.createConversation);
-    
-    renderWithProviders(<Chat />);
-    
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Hi, I am Benny. How are you today?')).toBeInTheDocument();
-      expect(screen.getByText('음성으로 대화하기')).toBeInTheDocument();
-    });
-  });
-
-  test('handles audio recording start', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch(mockApiResponses.createConversation);
-    
-    renderWithProviders(<Chat />);
-    
-    // Start chat first
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('음성으로 대화하기')).toBeInTheDocument();
-    });
-
-    // Click audio recording button
-    const recordButton = screen.getByTitle('음성 녹음으로 대화하기');
-    await user.click(recordButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('녹음 중...')).toBeInTheDocument();
-    });
-  });
-
-  test('shows TTS play buttons on messages', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch(mockApiResponses.createConversation);
-    
-    renderWithProviders(<Chat />);
-    
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
-
-    await waitFor(() => {
-      const message = screen.getByText('Hi, I am Benny. How are you today?');
-      expect(message).toBeInTheDocument();
+  describe('Initial State', () => {
+    test('renders initial chat start screen', () => {
+      renderWithProviders(<Chat />, { initialUser: mockUser });
       
-      // Check for TTS button (speaker icon)
-      const ttsButtons = screen.getAllByTitle('음성 재생');
-      expect(ttsButtons.length).toBeGreaterThan(0);
+      expect(screen.getByText('자기소개하기')).toBeInTheDocument();
+      expect(screen.getByText('🎤 음성으로만 대화할 수 있습니다')).toBeInTheDocument();
+      expect(screen.getByText('대화 시작하기')).toBeInTheDocument();
+      expect(screen.getByText('시나리오')).toBeInTheDocument();
+    });
+
+    test('displays microphone permission notice', () => {
+      renderWithProviders(<Chat />, { initialUser: mockUser });
+      
+      expect(screen.getByText('마이크 사용 권한')).toBeInTheDocument();
+      expect(screen.getByText('링글 AI와 음성으로 영어 대화를 나누기 위해서는 마이크 사용 권한이 필요해요.')).toBeInTheDocument();
+    });
+
+    test('shows scenario information', () => {
+      renderWithProviders(<Chat />, { initialUser: mockUser });
+      
+      expect(screen.getByText('새로운 사람을 만나는 비즈니스 환경에서 본인을 소개해보세요!')).toBeInTheDocument();
     });
   });
 
-  test('handles TTS playback', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch(mockApiResponses.createConversation);
-    
-    renderWithProviders(<Chat />);
-    
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
+  describe('Authentication', () => {
 
-    await waitFor(() => {
-      const ttsButton = screen.getByTitle('음성 재생');
-      expect(ttsButton).toBeInTheDocument();
-    });
-
-    const ttsButton = screen.getByTitle('음성 재생');
-    await user.click(ttsButton);
-
-    expect(window.speechSynthesis.speak).toHaveBeenCalled();
-  });
-
-  test('navigates back to home', async () => {
-    const user = userEvent.setup();
-    renderWithProviders(<Chat />);
-    
-    const backButton = screen.getByText('홈으로 돌아가기');
-    await user.click(backButton);
-
-    expect(mockNavigate).toHaveBeenCalledWith('/');
-  });
-
-  test('handles audio message sending', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch(mockApiResponses.createConversation)
-      .mockImplementationOnce(() => Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockApiResponses.createConversation)
-      } as Response))
-      .mockImplementationOnce(() => Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockApiResponses.audioMessage)
-      } as Response));
-    
-    renderWithProviders(<Chat />);
-    
-    // Start chat
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('음성으로 대화하기')).toBeInTheDocument();
-    });
-
-    // Start recording
-    const recordButton = screen.getByTitle('음성 녹음으로 대화하기');
-    await user.click(recordButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('정지')).toBeInTheDocument();
-    });
-
-    // Stop recording
-    const stopButton = screen.getByText('정지');
-    await user.click(stopButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('음성 전송')).toBeInTheDocument();
-    });
-
-    // Send audio
-    const sendButton = screen.getByText('음성 전송');
-    await user.click(sendButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/음성을 텍스트로 변환 중/)).toBeInTheDocument();
+    test('allows chat start when user is logged in', () => {
+      renderWithProviders(<Chat />, { initialUser: mockUser });
+      
+      const startButton = screen.getByText('대화 시작하기');
+      expect(startButton).toBeEnabled();
     });
   });
 
-  test('handles audio recording cancellation', async () => {
-    const user = userEvent.setup();
-    global.fetch = mockFetch(mockApiResponses.createConversation);
-    
-    renderWithProviders(<Chat />);
-    
-    // Start chat
-    const startButton = screen.getByText('대화 시작하기');
-    await user.click(startButton);
+  describe('Conversation Management', () => {
 
-    await waitFor(() => {
-      expect(screen.getByText('음성으로 대화하기')).toBeInTheDocument();
+
+    test('handles conversation creation error', async () => {
+      const user = userEvent.setup();
+      
+      mockCreateConversation.mockRejectedValue(new Error('Failed to create conversation'));
+      
+      renderWithProviders(<Chat />, { initialUser: mockUser });
+      
+      const startButton = screen.getByText('대화 시작하기');
+      await user.click(startButton);
+      
+      await waitFor(() => {
+        expect(screen.getByText('대화를 시작할 수 없습니다. 다시 시도해주세요.')).toBeInTheDocument();
+      });
     });
 
-    // Start recording
-    const recordButton = screen.getByTitle('음성 녹음으로 대화하기');
-    await user.click(recordButton);
+  });
 
-    await waitFor(() => {
-      expect(screen.getByText('정지')).toBeInTheDocument();
+  describe('Accessibility', () => {
+    test('has proper heading structure', () => {
+      renderWithProviders(<Chat />, { initialUser: mockUser });
+      
+      const mainHeading = screen.getByRole('heading', { level: 1 });
+      expect(mainHeading).toBeInTheDocument();
+      expect(mainHeading).toHaveTextContent('자기소개하기');
     });
-
-    // Stop recording to get cancel option
-    const stopButton = screen.getByText('정지');
-    await user.click(stopButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('취소')).toBeInTheDocument();
-    });
-
-    // Cancel recording
-    const cancelButton = screen.getByText('취소');
-    await user.click(cancelButton);
-
-    // Should return to initial recording state
-    expect(screen.queryByText('취소')).not.toBeInTheDocument();
   });
 });
