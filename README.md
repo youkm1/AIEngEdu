@@ -150,4 +150,4 @@ REACT_APP_API_BASE_URL=https://api.yourapp.com
 
 ---
 
-**개발 환경**: macOS/Linux 권장 | **Node.js**: v18+ | **Ruby**: 3.4.5 | **Docker**: 20.10+
+**Node.js**: v18+ | **Ruby**: 3.4.5 | **Docker**: 20.10+
