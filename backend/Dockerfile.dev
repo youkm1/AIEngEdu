@@ -1,4 +1,4 @@
-FROM ruby:3.2-alpine
+FROM ruby:3.4.5-alpine
 
 # 개발용 패키지 설치
 RUN apk add --no-cache \

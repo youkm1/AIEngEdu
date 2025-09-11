@@ -31,11 +31,26 @@ AI와 음성으로 영어 회화를 연습할 수 있는 웹 애플리케이션�
 
 ## 실행 방법
 
-### 전체 환경 실행 (권장)
+### Docker로 전체 환경 실행 (권장)
 ```bash
-# 루트 디렉토리에서
+# 1. 백엔드 디렉토리로 이동
+cd backend
+
+# 2. 환경변수 파일 생성
+cp .env.example.template .env.development
+
+# 3. .env.development 파일을 열어서 실제 API 키 설정
+# GEMINI_API_KEY=api_key_here
+
+# 4. Docker Compose로 전체 환경 실행
 docker-compose up -d
 ```
+
+실행 후 다음 서비스들이 시작됩니다:
+- **Rails API**: http://localhost:3001
+- **PostgreSQL**: localhost:5432
+- **Redis**: localhost:6379
+- **Sidekiq**: 백그라운드 작업 처리
 
 ### 개별 실행
 
@@ -142,9 +157,22 @@ redis-cli ping
 
 ## 🌐 배포
 
-### Docker로 배포
+### Docker 파일 구조
+
+**개발 환경:**
+- `Dockerfile.dev`: 개발용 (Ruby 3.4.5, 빠른 빌드)
+- `docker-compose.yml`: 개발 환경 전체 오케스트레이션
+
+**프로덕션 환경:**
+- `Dockerfile`: 프로덕션 최적화 (멀티스테이지 빌드, 보안)
+- Kamal 배포 또는 수동 빌드
+
 ```bash
-docker-compose -f docker-compose.yml up -d
+# 개발환경
+docker-compose up -d
+
+# 프로덕션 빌드
+docker build -t ringle_task .
 ```
 
 ### 환경 변수
