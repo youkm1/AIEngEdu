@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
     # Admin routes
     namespace :admin do
-      resources :memberships, only: [ :index, :destroy ] do
+      resources :memberships, only: [ :index, :show, :destroy ] do
         collection do
           post :assign, as: :assign
         end

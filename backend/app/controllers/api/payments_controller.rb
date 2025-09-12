@@ -87,9 +87,9 @@ class Api::PaymentsController < ApplicationController
     cancel_reason = params[:cancel_reason] || "고객 요청"
 
     # 해당 결제로 생성된 멤버십 찾기
-    membership = @user.memberships.active.first
+    membership = @user.membership
 
-    unless membership
+    unless membership&.active?
       return render json: {
         success: false,
         message: "취소할 활성 멤버십이 없습니다"
@@ -230,11 +230,11 @@ class Api::PaymentsController < ApplicationController
   end
 
   def create_membership_after_payment(membership_type, price, payment_result)
-    # 기존 활성 멤버십 만료 처리
-    @user.memberships.active.update_all(status: "expired")
+    # 기존 멤버십 삭제
+    @user.membership&.destroy
 
     # 새 멤버십 생성
-    @membership = @user.memberships.create!(
+    @membership = @user.create_membership!(
       membership_type: membership_type,
       start_date: Date.current,
       end_date: Date.current + Membership::DURATION_DAYS[membership_type].days,

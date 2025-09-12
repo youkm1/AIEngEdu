@@ -52,6 +52,13 @@ class Api::Admin::MembershipsController < ApplicationController
     )
   end
 
+  # GET /api/admin/memberships/:id
+  # 특정 멤버십 조회
+  def show
+    membership = Membership.find(params[:id])
+    render json: { success: true, data: membership }
+  end
+
   # GET /api/admin/memberships
   # 모든 멤버십 조회
   def index
