@@ -20,7 +20,7 @@ AI와 음성으로 영어 회화를 연습할 수 있는 웹 애플리케이션�
 - **Sidekiq** - 백그라운드 작업 처리
 - **Google Gemini API** - AI 대화 생성
 - **Docker** - 컨테이너화 환경
-- **Dependabot** - gem automating dependency management
+- **Dependabot** - gem dependency management 자동화
 
 #### Frontend (React)
 - **React 19** + **TypeScript**
