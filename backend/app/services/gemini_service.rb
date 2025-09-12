@@ -24,11 +24,11 @@ class GeminiService
       extract_text_from_response(response)
     else
       Rails.logger.error "Gemini API Error: #{response.code} - #{response.body}"
-      "죄송합니다. 일시적인 오류가 발생했습니다."
+      "Sorry, a temporary error occurred."
     end
   rescue => e
     Rails.logger.error "Gemini Service Error: #{e.message}"
-    "죄송합니다. 서비스 오류가 발생했습니다."
+    "Sorry, a service error occurred."
   end
 
   # Transcribe audio using Gemini's multimodal capabilities
@@ -72,11 +72,11 @@ class GeminiService
       extract_text_from_response(response).strip
     else
       Rails.logger.error "Gemini Audio Transcription Error: #{response.code} - #{response.body}"
-      "음성을 텍스트로 변환할 수 없습니다."
+      "Unable to convert audio to text."
     end
   rescue => e
     Rails.logger.error "Audio Transcription Error: #{e.message}"
-    "음성 변환 중 오류가 발생했습니다."
+    "An error occurred during audio transcription."
   end
 
   def stream_chat(message, conversation_history = [])
@@ -113,7 +113,20 @@ class GeminiService
   private
 
   def build_request_body(message, conversation_history = [])
-    contents = conversation_history.map do |msg|
+    contents = []
+    
+    # Add system instruction to always respond in English
+    contents << {
+      role: "user",
+      parts: [ { text: "IMPORTANT: You must ALWAYS respond in English only. Never respond in any other language, regardless of the input language." } ]
+    }
+    contents << {
+      role: "model",
+      parts: [ { text: "I understand. I will always respond in English only." } ]
+    }
+    
+    # Add conversation history
+    contents += conversation_history.map do |msg|
       {
         role: msg[:role] == "assistant" ? "model" : "user",
         parts: [ { text: msg[:content] } ]
@@ -138,7 +151,7 @@ class GeminiService
 
   def extract_text_from_response(response)
     response.dig("candidates", 0, "content", "parts", 0, "text") ||
-      "응답을 생성할 수 없습니다."
+      "Unable to generate a response."
   end
 
   def extract_text_from_streaming_response(data)

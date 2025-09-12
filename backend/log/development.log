@@ -2836,3 +2836,289 @@ Starting message flush to database...
 No pending messages found, checking conversation caches...
 Message flush completed: 0 messages in 0.0s
 MessageFlushJob completed successfully: 0 messages
+Started POST "/api/auth/login" for ::1 at 2025-09-12 13:30:06 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+Processing by Api::AuthController#login as */*
+  Parameters: {"email" => "[FILTERED]", "password" => "[FILTERED]", "auth" => {"email" => "[FILTERED]", "password" => "[FILTERED]"}}
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'user1@example.com' LIMIT 1 /*action='login',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:13:in 'Api::AuthController#login'
+Completed 200 OK in 135ms (Views: 0.2ms | ActiveRecord: 18.0ms (1 query, 0 cached) | GC: 3.2ms)
+
+
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:30:06 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (1.5ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 70ms (Views: 0.2ms | ActiveRecord: 11.6ms (2 queries, 0 cached) | GC: 15.0ms)
+
+
+Started POST "/chat" for ::1 at 2025-09-12 13:30:22 +0900
+Processing by ChatController#create as */*
+  Parameters: {"title" => "자기소개하기", "user_id" => 1, "chat" => {"title" => "자기소개하기", "user_id" => 1}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+  [1m[36mMembership Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-12' AND status = 'active') LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:13:in 'User#has_active_membership?'
+  [1m[36mMembership Load (1.5ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-12' AND status = 'active') ORDER BY "memberships"."id" ASC LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:18:in 'User#active_membership'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mBEGIN /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+  [1m[36mConversation Create (3.3ms)[0m  [1m[32mINSERT INTO "conversations" ("user_id", "title", "created_at", "updated_at") VALUES (1, '자기소개하기', '2025-09-12 04:30:22.989413', '2025-09-12 04:30:22.989413') RETURNING "id" /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+  [1m[36mTRANSACTION (8.8ms)[0m  [1m[35mCOMMIT /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+Completed 200 OK in 67ms (Views: 0.4ms | ActiveRecord: 22.5ms (4 queries, 0 cached) | GC: 0.7ms)
+
+
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 13:31:22 +0900
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x000000012babd340 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-24627-q8vbz.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "20", "user_id" => "1"}
+  [1m[36mUser Load (5.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+Gemini Audio Transcription Error: 403 - {
+  "error": {
+    "code": 403,
+    "message": "Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.",
+    "status": "PERMISSION_DENIED"
+  }
+}
+
+  [1m[36mMessage Load (3.5ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 20 AND (created_at < '2025-09-12 04:31:23.600318') ORDER BY "messages"."created_at" DESC LIMIT 19 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:193:in 'Enumerable#map'
+Gemini API Error: 403 - {
+  "error": {
+    "code": 403,
+    "message": "Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.",
+    "status": "PERMISSION_DENIED"
+  }
+}
+
+Completed 200 OK in 1595ms (Views: 1.0ms | ActiveRecord: 18.4ms (2 queries, 0 cached) | GC: 2.1ms)
+
+
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 13:31:42 +0900
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x000000013d1faa20 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-24627-c9j4m7.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "20", "user_id" => "1"}
+  [1m[36mUser Load (2.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+Gemini Audio Transcription Error: 403 - {
+  "error": {
+    "code": 403,
+    "message": "Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.",
+    "status": "PERMISSION_DENIED"
+  }
+}
+
+  [1m[36mMessage Load (1.7ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 20 AND (created_at < '2025-09-12 04:31:43.711817') ORDER BY "messages"."created_at" DESC LIMIT 17 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:193:in 'Enumerable#map'
+Gemini API Error: 403 - {
+  "error": {
+    "code": 403,
+    "message": "Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.",
+    "status": "PERMISSION_DENIED"
+  }
+}
+
+Completed 200 OK in 1864ms (Views: 0.6ms | ActiveRecord: 4.4ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+[dotenv] Set [36mDB_HOST[0m, [36mDB_PORT[0m, [36mDB_USERNAME[0m, [36mDB_PASSWORD[0m, [36mGEMINI_API_KEY[0m, and [36mREDIS_URL[0m
+[dotenv] Loaded [33m.env.development[0m
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 13:37:33 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='RingleTask'*/[0m
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x0000000128a9ae10 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-35179-salqkg.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "20", "user_id" => "1"}
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+  [1m[36mMessage Load (2.5ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 20 AND (created_at < '2025-09-12 04:37:35.294543') ORDER BY "messages"."created_at" DESC LIMIT 15 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:193:in 'Enumerable#map'
+Completed 200 OK in 2445ms (Views: 1.0ms | ActiveRecord: 26.6ms (2 queries, 0 cached) | GC: 5.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:40:53 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 64ms (Views: 0.2ms | ActiveRecord: 21.4ms (1 query, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:40:53 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 36ms (Views: 0.1ms | ActiveRecord: 1.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/chat" for ::1 at 2025-09-12 13:40:54 +0900
+Processing by ChatController#create as */*
+  Parameters: {"title" => "자기소개하기", "user_id" => 1, "chat" => {"title" => "자기소개하기", "user_id" => 1}}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+  [1m[36mMembership Exists? (3.1ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-12' AND status = 'active') LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:13:in 'User#has_active_membership?'
+  [1m[36mMembership Load (1.2ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 AND (end_date >= '2025-09-12' AND status = 'active') ORDER BY "memberships"."id" ASC LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:18:in 'User#active_membership'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+  [1m[36mConversation Create (3.1ms)[0m  [1m[32mINSERT INTO "conversations" ("user_id", "title", "created_at", "updated_at") VALUES (1, '자기소개하기', '2025-09-12 04:40:54.926612', '2025-09-12 04:40:54.926612') RETURNING "id" /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+  [1m[36mTRANSACTION (17.3ms)[0m  [1m[35mCOMMIT /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+Completed 200 OK in 93ms (Views: 0.2ms | ActiveRecord: 36.4ms (4 queries, 0 cached) | GC: 1.9ms)
+
+
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 13:41:01 +0900
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x000000012cc19c60 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-35179-yckrbu.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "21", "user_id" => "1"}
+  [1m[36mUser Load (3.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+  [1m[36mMessage Load (1.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 21 AND (created_at < '2025-09-12 04:41:03.853957') ORDER BY "messages"."created_at" DESC LIMIT 19 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:193:in 'Enumerable#map'
+Completed 200 OK in 2956ms (Views: 0.2ms | ActiveRecord: 10.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 13:41:49 +0900
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x0000000129dde8f0 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-35179-ivvjkq.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "21", "user_id" => "1"}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+  [1m[36mMessage Load (2.9ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 21 AND (created_at < '2025-09-12 04:41:52.136048') ORDER BY "messages"."created_at" DESC LIMIT 17 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:193:in 'Enumerable#map'
+Completed 200 OK in 3153ms (Views: 0.6ms | ActiveRecord: 4.5ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/chat/message/audio" for ::1 at 2025-09-12 13:43:00 +0900
+Processing by ChatController#message_audio as */*
+  Parameters: {"audio_file" => #<ActionDispatch::Http::UploadedFile:0x00000001290dda20 @tempfile=#<Tempfile:/var/folders/r3/qp6rt7pn1kj8r0c0cz0ry_wc0000gn/T/RackMultipart20250912-35179-hrcnyg.webm>, @content_type="audio/wav", @original_filename="recording.webm", @headers="Content-Disposition: form-data; name=\"audio_file\"; filename=\"recording.webm\"\r\nContent-Type: audio/wav\r\n">, "conversation_id" => "21", "user_id" => "1"}
+  [1m[36mUser Load (5.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+  [1m[36mMessage Load (3.6ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."conversation_id" = 21 AND (created_at < '2025-09-12 04:43:03.030285') ORDER BY "messages"."created_at" DESC LIMIT 15 /*action='message_audio',application='RingleTask',controller='chat'*/[0m
+  ↳ app/services/message_cache_service.rb:193:in 'Enumerable#map'
+Completed 200 OK in 3688ms (Views: 0.8ms | ActiveRecord: 8.8ms (2 queries, 0 cached) | GC: 30.0ms)
+
+
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:55:58 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (43.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (1.0ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 95ms (Views: 0.3ms | ActiveRecord: 52.5ms (2 queries, 0 cached) | GC: 1.5ms)
+
+
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:55:58 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.6ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 39ms (Views: 0.1ms | ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:56:04 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (3.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 42ms (Views: 0.1ms | ActiveRecord: 3.0ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:56:04 +0900
+Processing by Api::AuthController#me as */*
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:56:04 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 94ms (Views: 0.1ms | ActiveRecord: 1.5ms (1 query, 0 cached) | GC: 5.5ms)
+
+
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.6ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 76ms (Views: 0.1ms | ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:56:05 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (1.0ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 39ms (Views: 0.1ms | ActiveRecord: 2.5ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:56:05 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 40ms (Views: 0.1ms | ActiveRecord: 1.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:56:05 +0900
+Processing by Api::AuthController#me as */*
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:56:05 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 91ms (Views: 0.3ms | ActiveRecord: 1.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.8ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 92ms (Views: 0.1ms | ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 10.8ms)
+
+
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:56:06 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.9ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 39ms (Views: 0.1ms | ActiveRecord: 2.4ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:56:06 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 41ms (Views: 0.1ms | ActiveRecord: 1.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 13:56:06 +0900
+Processing by Api::AuthController#me as */*
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:56:06 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 91ms (Views: 0.1ms | ActiveRecord: 1.5ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.8ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 80ms (Views: 0.1ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/1/memberships" for ::1 at 2025-09-12 13:56:06 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "1", "membership" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.7ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 39ms (Views: 0.1ms | ActiveRecord: 2.2ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
