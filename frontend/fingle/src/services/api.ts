@@ -234,7 +234,7 @@ class ApiService {
     });
   }
 
-  // Membership methods
+  // Membership methods (now returns single membership in array for backwards compatibility)
   async getUserMemberships(userId: number): Promise<Membership[]> {
     return this.request<Membership[]>(`/api/users/${userId}/memberships`);
   }

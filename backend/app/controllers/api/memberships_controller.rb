@@ -6,10 +6,13 @@ class Api::MembershipsController < ApplicationController
   before_action :set_user, only: [ :create, :index ]
   before_action :set_membership, only: [ :show, :update, :destroy ]
 
-  # GET /api/users/:user_id/memberships
+  # GET /api/users/:user_id/memberships  
   def index
-    @memberships = @user.memberships.includes(:user)
-    render json: @memberships.map { |m| membership_json(m) }
+    if @user.membership
+      render json: [membership_json(@user.membership)]
+    else
+      render json: []
+    end
   end
 
   # GET /api/memberships/:id
@@ -19,10 +22,10 @@ class Api::MembershipsController < ApplicationController
 
   # POST /api/users/:user_id/memberships
   def create
-    # 기존 활성 멤버십 비활성화
-    @user.memberships.active.update_all(status: "expired")
+    # 기존 멤버십 비활성화 (또는 삭제)
+    @user.membership&.destroy
 
-    @membership = @user.memberships.build(membership_params)
+    @membership = @user.build_membership(membership_params)
     @membership.status = "active"
 
     # 자동으로 종료일 설정 (멤버십 타입에 따라)
@@ -80,10 +83,10 @@ class Api::MembershipsController < ApplicationController
       user = User.find_by(id: membership_data[:user_id])
       next errors << "User #{membership_data[:user_id]} not found" unless user
 
-      # 기존 활성 멤버십 비활성화
-      user.memberships.active.update_all(status: "expired")
+      # 기존 멤버십 삭제
+      user.membership&.destroy
 
-      membership = user.memberships.build(
+      membership = user.build_membership(
         membership_type: membership_data[:membership_type],
         start_date: membership_data[:start_date] || Date.current,
         price: membership_data[:price],

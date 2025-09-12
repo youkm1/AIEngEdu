@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 8) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_12_054427) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -77,7 +77,7 @@ ActiveRecord::Schema[8.0].define(version: 8) do
     t.index ["membership_type"], name: "index_memberships_on_membership_type"
     t.index ["start_date"], name: "index_memberships_on_start_date"
     t.index ["status"], name: "index_memberships_on_status"
-    t.index ["user_id"], name: "index_memberships_on_user_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id", unique: true
   end
 
   create_table "messages", force: :cascade do |t|

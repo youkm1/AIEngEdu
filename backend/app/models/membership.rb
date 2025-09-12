@@ -20,7 +20,7 @@ class Membership < ApplicationRecord
   belongs_to :user
 
   validates :membership_type, inclusion: { in: LEVELS.keys }
-  validates :user_id, presence: true, uniqueness: { scope: :status, conditions: -> { where(status: "active") }, message: "can only have one active membership" }
+  validates :user_id, presence: true, uniqueness: { message: "can only have one membership" }
   validates :start_date, presence: true
   validates :end_date, presence: true
 

@@ -10,11 +10,11 @@ class Api::Admin::MembershipsController < ApplicationController
   def assign
     user = User.find(params[:user_id])
 
-    # 기존 활성 멤버십 만료 처리
-    user.memberships.active.update_all(status: "expired")
+    # 기존 멤버십 삭제
+    user.membership&.destroy
 
     # 새 멤버십 생성
-    membership = user.memberships.build(
+    membership = user.build_membership(
       membership_type: params[:membership_type],
       start_date: params[:start_date] || Date.current,
       price: params[:price] || 0,

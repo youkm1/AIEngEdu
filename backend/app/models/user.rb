@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_many :memberships, dependent: :destroy
+  has_one :membership, dependent: :destroy
   has_many :conversations, dependent: :destroy
   has_many :coupons, dependent: :destroy
 
@@ -10,12 +10,12 @@ class User < ApplicationRecord
 
   # 활성 멤버십이 있는지 확인
   def has_active_membership?
-    memberships.active.exists?
+    membership&.active?
   end
 
-  # 활성 멤버십 가져오기
+  # 활성 멤버십 가져오기 (이제 단일 멤버십)
   def active_membership
-    memberships.active.first
+    membership if membership&.active?
   end
 
   # 대화를 시작할 수 있는지 확인 (멤버십 또는 쿠폰)

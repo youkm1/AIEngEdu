@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './home/Home';
 import Chat from './chat/Chat';
+import Payment from './payment/Payment';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/payment" element={<Payment />} />
           </Routes>
         </div>
       </Router>

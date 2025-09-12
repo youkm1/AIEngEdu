@@ -109,6 +109,37 @@ const Home = () => {
     navigate('/chat');
   };
 
+  const handlePlanPurchase = async (membershipType: 'basic' | 'premium') => {
+    if (!user) {
+      return;
+    }
+
+    try {
+      // Prepare payment
+      const prepareResponse = await apiService.preparePayment(user.id, membershipType);
+      
+      if (prepareResponse.success && prepareResponse.data) {
+        const { orderId, amount, orderName } = prepareResponse.data;
+        
+        // Navigate to payment page with payment info
+        navigate('/payment', {
+          state: {
+            orderId,
+            amount,
+            orderName,
+            membershipType,
+            userId: user.id
+          }
+        });
+      } else {
+        alert('Failed to prepare payment. Please try again.');
+      }
+    } catch (error) {
+      console.error('Payment preparation failed:', error);
+      alert('Payment preparation failed. Please try again.');
+    }
+  };
+
   return (
     <div className="bg-[var(--secondary-color)] text-[var(--text-primary)]">
       <div className="flex flex-col min-h-screen">
@@ -325,6 +356,7 @@ const Home = () => {
                   <button 
                     className="w-full bg-gray-100 text-gray-800 font-bold py-4 px-6 text-lg rounded-xl hover:bg-gray-200 transition-all duration-200 disabled:opacity-50"
                     disabled={!isLoggedIn}
+                    onClick={() => handlePlanPurchase('basic')}
                   >
                     {isLoggedIn ? '플랜 시작하기' : '로그인 후 이용 가능'}
                   </button>
@@ -367,6 +399,7 @@ const Home = () => {
                   <button 
                     className="w-full bg-[var(--primary-color)] text-white font-bold py-4 px-6 text-lg rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg disabled:opacity-50"
                     disabled={!isLoggedIn}
+                    onClick={() => handlePlanPurchase('premium')}
                   >
                     {isLoggedIn ? '플랜 시작하기' : '로그인 후 이용 가능'}
                   </button>
