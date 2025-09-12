@@ -34,8 +34,11 @@ admin = User.create!(
 # Memberships 생성
 puts "Creating memberships..."
 
-# 각 유저에게 하나의 멤버십만 부여
+# 각 유저에게 하나의 멤버십만 부여 (user2 제외)
 users.each_with_index do |user, index|
+  # Skip user2 (index 1) - they should not have any membership
+  next if user.email == "user2@example.com"
+  
   # 50% 유저는 premium, 50%는 basic
   membership_type = index.even? ? "premium" : "basic"
 
