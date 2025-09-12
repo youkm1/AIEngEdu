@@ -69,6 +69,19 @@ export interface PaymentConfirmResponse {
   membership: Membership;
 }
 
+export interface Coupon {
+  id: number;
+  name: string;
+  total_uses: number;
+  used_count: number;
+  remaining_uses: number;
+  expires_at: string;
+  status: 'active' | 'expired' | 'exhausted' | 'inactive';
+  usable: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 // Request Types
 export interface LoginRequest {
   email: string;
@@ -254,6 +267,15 @@ class ApiService {
         amount,
       },
     });
+  }
+
+  // Coupon methods
+  async getUserCoupons(userId: number): Promise<Coupon[]> {
+    return this.request<Coupon[]>(`/api/users/${userId}/coupons`);
+  }
+
+  async getAvailableCoupons(userId: number): Promise<{ success: boolean; data: Coupon[]; total_available: number; has_available: boolean }> {
+    return this.request(`/api/users/${userId}/coupons/available`);
   }
 }
 

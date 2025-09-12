@@ -3490,3 +3490,409 @@ Processing by Api::MembershipsController#index as */*
 Completed 200 OK in 38ms (Views: 0.0ms | ActiveRecord: 2.5ms (2 queries, 0 cached) | GC: 0.0ms)
 
 
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:03:54 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (12.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.7ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 52ms (Views: 0.2ms | ActiveRecord: 12.8ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:03:54 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.7ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 38ms (Views: 0.1ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:04:08 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (3.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.6ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 45ms (Views: 0.1ms | ActiveRecord: 3.5ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:04:08 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.7ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 43ms (Views: 0.1ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:04:54 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (3.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (1.5ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 59ms (Views: 0.3ms | ActiveRecord: 5.3ms (2 queries, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:04:54 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (2.0ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 51ms (Views: 0.1ms | ActiveRecord: 29.0ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:05:19 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (7.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 48ms (Views: 0.2ms | ActiveRecord: 7.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:05:19 +0900
+Processing by Api::AuthController#me as */*
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:05:19 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 93ms (Views: 0.1ms | ActiveRecord: 1.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.9ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 87ms (Views: 0.1ms | ActiveRecord: 2.4ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:05:19 +0900
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:05:19 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (2.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (1.3ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 108ms (Views: 0.1ms | ActiveRecord: 3.3ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mUser Load (117.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (1.3ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 223ms (Views: 0.1ms | ActiveRecord: 126.6ms (2 queries, 0 cached) | GC: 1.4ms)
+
+
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:05:20 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (1.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (0.6ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 44ms (Views: 0.1ms | ActiveRecord: 2.5ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started POST "/chat" for ::1 at 2025-09-12 14:05:24 +0900
+Processing by ChatController#create as */*
+  Parameters: {"title" => "자기소개하기", "user_id" => 17, "chat" => {"title" => "자기소개하기", "user_id" => 17}}
+  [1m[36mUser Load (5.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:227:in 'ChatController#current_user'
+  [1m[36mMembership Exists? (5.0ms)[0m  [1m[34mSELECT 1 AS one FROM "memberships" WHERE "memberships"."user_id" = 17 AND (end_date >= '2025-09-12' AND status = 'active') LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:13:in 'User#has_active_membership?'
+  [1m[36mCoupon Exists? (2.2ms)[0m  [1m[34mSELECT 1 AS one FROM "coupons" WHERE "coupons"."user_id" = 17 AND (expires_at > '2025-09-12 05:05:24.508201') AND (used_count < total_uses) LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:28:in 'User#has_available_coupons?'
+  [1m[36mCoupon Load (2.2ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 AND (expires_at > '2025-09-12 05:05:24.511052') AND (used_count < total_uses) ORDER BY "coupons"."created_at" ASC LIMIT 1 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/user.rb:33:in 'User#next_available_coupon'
+  [1m[36mCoupon Update All (15.5ms)[0m  [1m[33mUPDATE "coupons" SET "used_count" = COALESCE("used_count", 0) + 1 WHERE "coupons"."id" = 6 /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/models/coupon.rb:41:in 'Coupon#use!'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+  [1m[36mConversation Create (4.7ms)[0m  [1m[32mINSERT INTO "conversations" ("user_id", "title", "created_at", "updated_at") VALUES (17, '자기소개하기', '2025-09-12 05:05:24.531738', '2025-09-12 05:05:24.531738') RETURNING "id" /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+  [1m[36mTRANSACTION (5.2ms)[0m  [1m[35mCOMMIT /*action='create',application='RingleTask',controller='chat'*/[0m
+  ↳ app/controllers/chat_controller.rb:20:in 'ChatController#create'
+Completed 200 OK in 88ms (Views: 0.3ms | ActiveRecord: 40.3ms (6 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:05:30 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (2.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.9ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 41ms (Views: 0.1ms | ActiveRecord: 3.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:05:30 +0900
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:05:30 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mUser Load (2.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mMembership Load (0.9ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 91ms (Views: 0.1ms | ActiveRecord: 2.4ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mCoupon Load (1.0ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 92ms (Views: 0.1ms | ActiveRecord: 3.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:05:30 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (0.6ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 40ms (Views: 0.1ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:08:41 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (12.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 54ms (Views: 2.1ms | ActiveRecord: 12.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:08:41 +0900
+Processing by Api::AuthController#me as */*
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:08:41 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 88ms (Views: 0.1ms | ActiveRecord: 1.2ms (1 query, 0 cached) | GC: 0.7ms)
+
+
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (1.2ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 79ms (Views: 0.1ms | ActiveRecord: 2.7ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:08:41 +0900
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:08:41 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (2.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.8ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 103ms (Views: 0.1ms | ActiveRecord: 2.7ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+  [1m[36mUser Load (4.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (0.9ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 105ms (Views: 0.1ms | ActiveRecord: 5.3ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:08:41 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (0.5ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 40ms (Views: 0.1ms | ActiveRecord: 1.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:08:43 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 50ms (Views: 0.1ms | ActiveRecord: 1.8ms (1 query, 0 cached) | GC: 5.2ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:08:43 +0900
+Processing by Api::AuthController#me as */*
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:08:43 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 90ms (Views: 0.1ms | ActiveRecord: 0.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.4ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 77ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:08:43 +0900
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:08:43 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (6.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mUser Load (7.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mMembership Load (0.8ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 106ms (Views: 0.1ms | ActiveRecord: 7.4ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mCoupon Load (0.9ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 106ms (Views: 0.1ms | ActiveRecord: 8.0ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:08:43 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (1.0ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 38ms (Views: 0.1ms | ActiveRecord: 2.5ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:08:45 +0900
+Processing by Api::AuthController#me as */*
+  [1m[36mUser Load (2.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 46ms (Views: 0.1ms | ActiveRecord: 1.8ms (1 query, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/api/auth/me" for ::1 at 2025-09-12 14:08:45 +0900
+Processing by Api::AuthController#me as */*
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:08:45 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='me',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:82:in 'Api::AuthController#verify_token'
+Completed 200 OK in 112ms (Views: 0.1ms | ActiveRecord: 1.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.6ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 105ms (Views: 0.1ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:08:45 +0900
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:08:45 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mUser Load (2.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mMembership Load (0.8ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 107ms (Views: 0.1ms | ActiveRecord: 2.6ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+  [1m[36mCoupon Load (1.0ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 110ms (Views: 0.1ms | ActiveRecord: 3.1ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:08:45 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (1.1ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 38ms (Views: 0.1ms | ActiveRecord: 2.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/memberships" for ::1 at 2025-09-12 14:09:39 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "17", "membership" => {}}
+  [1m[36mUser Load (7.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.9ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 17 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 61ms (Views: 0.8ms | ActiveRecord: 8.3ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/17/coupons" for ::1 at 2025-09-12 14:09:39 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "17", "coupon" => {}}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 17 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (1.2ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 17 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 41ms (Views: 0.3ms | ActiveRecord: 2.8ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/api/auth/login" for ::1 at 2025-09-12 14:10:14 +0900
+Processing by Api::AuthController#login as */*
+  Parameters: {"email" => "[FILTERED]", "password" => "[FILTERED]", "auth" => {"email" => "[FILTERED]", "password" => "[FILTERED]"}}
+  [1m[36mUser Load (13.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = 'user1@example.com' LIMIT 1 /*action='login',application='RingleTask',controller='auth'*/[0m
+  ↳ app/controllers/api/auth_controller.rb:13:in 'Api::AuthController#login'
+Completed 200 OK in 53ms (Views: 0.2ms | ActiveRecord: 13.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/16/memberships" for ::1 at 2025-09-12 14:10:14 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "16", "membership" => {}}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 16 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.8ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 16 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 44ms (Views: 0.2ms | ActiveRecord: 2.4ms (2 queries, 0 cached) | GC: 5.3ms)
+
+
+Started GET "/api/users/16/coupons" for ::1 at 2025-09-12 14:10:14 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "16", "coupon" => {}}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 16 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (0.8ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 16 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 37ms (Views: 0.1ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/16/memberships" for ::1 at 2025-09-12 14:12:34 +0900
+Processing by Api::MembershipsController#index as */*
+  Parameters: {"user_id" => "16", "membership" => {}}
+  [1m[36mUser Load (19.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 16 LIMIT 1 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:118:in 'Api::MembershipsController#set_user'
+  [1m[36mMembership Load (0.6ms)[0m  [1m[34mSELECT "memberships".* FROM "memberships" WHERE "memberships"."user_id" = 16 /*action='index',application='RingleTask',controller='memberships'*/[0m
+  ↳ app/controllers/api/memberships_controller.rb:12:in 'Enumerable#map'
+Completed 200 OK in 65ms (Views: 0.5ms | ActiveRecord: 20.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/users/16/coupons" for ::1 at 2025-09-12 14:12:34 +0900
+Processing by Api::CouponsController#index as */*
+  Parameters: {"user_id" => "16", "coupon" => {}}
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 16 LIMIT 1 /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:67:in 'Api::CouponsController#set_user'
+  [1m[36mCoupon Load (1.4ms)[0m  [1m[34mSELECT "coupons".* FROM "coupons" WHERE "coupons"."user_id" = 16 ORDER BY "coupons"."created_at" ASC /*action='index',application='RingleTask',controller='coupons'*/[0m
+  ↳ app/controllers/api/coupons_controller.rb:11:in 'Enumerable#map'
+Completed 200 OK in 43ms (Views: 0.2ms | ActiveRecord: 3.3ms (2 queries, 0 cached) | GC: 0.9ms)
+
+

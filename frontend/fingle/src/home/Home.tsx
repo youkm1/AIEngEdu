@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './home.css';
 import { useAuth } from '../contexts/AuthContext';
-import apiService, { Membership } from '../services/api';
+import apiService, { Membership, Coupon } from '../services/api';
 
 interface LoginFormData {
   email: string;
@@ -10,7 +10,7 @@ interface LoginFormData {
 }
 
 const Home = () => {
-  const { user, isLoggedIn, login, error, clearError, isLoading } = useAuth();
+  const { user, isLoggedIn, login, logout, error, clearError, isLoading } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
@@ -19,17 +19,24 @@ const Home = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [membership, setMembership] = useState<Membership | null>(null);
   const [membershipLoading, setMembershipLoading] = useState<boolean>(false);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [couponsLoading, setCouponsLoading] = useState<boolean>(false);
+  const [membershipError, setMembershipError] = useState<string | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
 
-  // Fetch membership data when user is logged in
+  // Fetch membership and coupon data when user is logged in
   useEffect(() => {
-    const fetchMembership = async () => {
+    const fetchUserData = async () => {
       if (!user || !isLoggedIn) {
         setMembership(null);
+        setCoupons([]);
         return;
       }
 
+      // Fetch membership
       try {
         setMembershipLoading(true);
+        setMembershipError(null);
         const memberships = await apiService.getUserMemberships(user.id);
         // Get the active membership
         const activeMembership = memberships.find(m => m.is_active) || memberships[0] || null;
@@ -37,12 +44,32 @@ const Home = () => {
       } catch (error) {
         console.error('Failed to fetch membership:', error);
         setMembership(null);
+        // Don't show error if just no membership exists
+        if (error instanceof Error && !error.message.includes('404')) {
+          setMembershipError('Failed to load membership information');
+        }
       } finally {
         setMembershipLoading(false);
       }
+
+      // Fetch coupons
+      try {
+        setCouponsLoading(true);
+        setCouponError(null);
+        const userCoupons = await apiService.getUserCoupons(user.id);
+        setCoupons(userCoupons);
+      } catch (error) {
+        console.error('Failed to fetch coupons:', error);
+        setCoupons([]);
+        if (error instanceof Error && !error.message.includes('404')) {
+          setCouponError('Failed to load coupon information');
+        }
+      } finally {
+        setCouponsLoading(false);
+      }
     };
 
-    fetchMembership();
+    fetchUserData();
   }, [user, isLoggedIn]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,10 +176,14 @@ const Home = () => {
                     안녕하세요, {user?.name}님!
                   </span>
                   
-                  {/* Membership info */}
+                  {/* Membership or Coupon info */}
                   <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-lg">
-                    {membershipLoading ? (
-                      <div className="text-xs text-gray-500">로딩 중...</div>
+                    {membershipLoading || couponsLoading ? (
+                      <div className="text-xs text-gray-500">Loading...</div>
+                    ) : membershipError || couponError ? (
+                      <div className="text-xs text-red-500">
+                        {membershipError || couponError}
+                      </div>
                     ) : membership ? (
                       <>
                         <div className={`w-2 h-2 rounded-full ${
@@ -160,28 +191,37 @@ const Home = () => {
                         }`}></div>
                         <div className="text-xs">
                           <span className="font-semibold text-gray-700">
-                            {membership.membership_type === 'premium' ? '프리미엄' : '베이직'}
+                            {membership.membership_type === 'premium' ? 'Premium' : 'Basic'}
                           </span>
                           <span className="text-gray-500 ml-1">
-                            ({membership.status === 'active' ? '활성' : '만료됨'})
+                            ({membership.status === 'active' ? 'Active' : 'Expired'})
                           </span>
                         </div>
                         {membership.status === 'active' && (
                           <div className="text-xs text-gray-500">
-                            {new Date(membership.end_date) > new Date() 
-                              ? `~${new Date(membership.end_date).toLocaleDateString()}`
-                              : '만료됨'
-                            }
+                            Until {new Date(membership.end_date).toLocaleDateString()}
                           </div>
                         )}
                       </>
+                    ) : coupons.length > 0 ? (
+                      <>
+                        <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                        <div className="text-xs">
+                          <span className="font-semibold text-gray-700">
+                            {coupons.filter(c => c.usable).length} Coupon{coupons.filter(c => c.usable).length !== 1 ? 's' : ''}
+                          </span>
+                          <span className="text-gray-500 ml-1">
+                            ({coupons.reduce((sum, c) => sum + c.remaining_uses, 0)} uses remaining)
+                          </span>
+                        </div>
+                      </>
                     ) : (
-                      <div className="text-xs text-gray-500">멤버십 없음</div>
+                      <div className="text-xs text-gray-500">No membership or coupons</div>
                     )}
                   </div>
                   
                   <button 
-                    onClick={() => navigate('/')}
+                    onClick={logout}
                     className="text-sm text-gray-600 hover:text-[var(--primary-color)]"
                   >
                     로그아웃
