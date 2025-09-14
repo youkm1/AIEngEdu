@@ -151,7 +151,7 @@ describe('Home Component', () => {
     test('shows pricing plans section', () => {
       renderWithProviders(<Home />, { initialUser: mockUser });
       
-      expect(screen.getByText('링글 플랜')).toBeInTheDocument();
+      expect(screen.getByText('플랜')).toBeInTheDocument();
       expect(screen.getByText('베이직')).toBeInTheDocument();
       expect(screen.getByText('프리미엄')).toBeInTheDocument();
       expect(screen.getByText('가장 인기 있는')).toBeInTheDocument();
