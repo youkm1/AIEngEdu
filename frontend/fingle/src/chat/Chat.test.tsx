@@ -54,7 +54,7 @@ describe('Chat Component', () => {
       renderWithProviders(<Chat />, { initialUser: mockUser });
       
       expect(screen.getByText('마이크 사용 권한')).toBeInTheDocument();
-      expect(screen.getByText('링글 AI와 음성으로 영어 대화를 나누기 위해서는 마이크 사용 권한이 필요해요.')).toBeInTheDocument();
+      expect(screen.getByText('AI와 음성으로 영어 대화를 나누기 위해서는 마이크 사용 권한이 필요해요.')).toBeInTheDocument();
     });
 
     test('shows scenario information', () => {
