@@ -408,7 +408,7 @@ const Chat: React.FC<ChatProps> = ({ onBack }) => {
                   </div>
                   <h2 className="font-bold text-gray-900 text-xl">마이크 사용 권한</h2>
                 </div>
-                <p className="text-gray-700 text-lg">링글 AI와 음성으로 영어 대화를 나누기 위해서는 마이크 사용 권한이 필요해요.</p>
+                <p className="text-gray-700 text-lg">AI와 음성으로 영어 대화를 나누기 위해서는 마이크 사용 권한이 필요해요.</p>
               </div>
               
               {error && (
