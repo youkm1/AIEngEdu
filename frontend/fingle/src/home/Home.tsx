@@ -158,7 +158,7 @@ const Home = () => {
                 <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path> 
                 <circle cx="12" cy="10" r="3"></circle>
               </svg>
-              <span className="text-xl font-bold">Ringle</span>
+              <span className="text-xl font-bold">AI Chat in Eng!</span>
             </div>
             <nav className="flex items-center gap-6">
               <a className="text-sm font-medium text-gray-600 hover:text-[var(--primary-color)]" href="#">소개</a>
@@ -315,7 +315,7 @@ const Home = () => {
                 <div className="flex justify-center xl:justify-end">
                   <div className="relative">
                     <img 
-                      alt="Ringle 플랫폼 스크린샷" 
+                      alt="AI Chat in Eng 플랫폼 스크린샷" 
                       className="rounded-2xl shadow-2xl max-w-lg xl:max-w-xl w-full" 
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGAT4sPGzADv_CRT_Q72U4CU5jyd-ymXPNj-bwVZfmtfFXuMHedUQDEdxVvYu90LkOI3eIco9JGeB1spWuY3eY9TlWzNRCA0ExL_vnBv1dkn6RGvNsz-rHBO3cFFjoA0FBdapMZqyNQ5d0zRSeZVf9lHD2bK5cszbKUdteYzytkDHcrWD7d3OH5mKhvm0VSXWZkr5AmnwJ4W6tWS1laYcyd0oXi7HeXbxY6JvVCYihIsk6aFc0n_bFGuSWTBfqRDBFoqMR--maeGY"
                     />
@@ -426,7 +426,7 @@ const Home = () => {
                     <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path> 
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
-                  <span className="text-2xl font-bold">Ringle</span>
+                  <span className="text-2xl font-bold">AI Chat in Eng</span>
                 </div>
                 <p className="text-gray-300 text-lg leading-relaxed max-w-md">
                   세계 최고 수준의 튜터와 함께하는 1:1 영어 회화 수업으로 실력을 향상시켜보세요.
@@ -453,7 +453,7 @@ const Home = () => {
             </div>
             
             <div className="border-t border-gray-700 mt-12 pt-8">
-              <p className="text-center text-gray-400">© 2024 Ringle. All rights reserved.</p>
+              <p className="text-center text-gray-400">© 2024 AI Chat in Eng. All rights reserved.</p>
             </div>
           </div>
         </footer>
