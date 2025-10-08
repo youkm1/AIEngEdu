@@ -26,7 +26,7 @@ gem "jbuilder"
 gem "rack-cors"
 
 # AI & SSE Support
-gem "httparty", "~> 0.21"
+gem "httparty", "~> 0.23"
 gem "dotenv-rails", groups: [ :development, :test ]
 
 # Caching & Background Jobs
